@@ -9,8 +9,9 @@
 
 ## Cómo se aprueba la cursada?
 
-...
+-   Hay 5 instancias de evaluación parcial: 2 individuales y 3 grupales (proyecto integrador).
+-   Se aprueba con mínimo 4 en cada una de las 5 evaluaciones parciales.
 
 ## Cómo se aprueba la promoción?
 
-...
+-   Se promociona con **al menos promedio 6 entre las 5 evaluaciones parciales** y **al menos nota 4 en cada una**.
