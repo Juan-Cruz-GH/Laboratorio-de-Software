@@ -6,7 +6,6 @@ public class Vacuna {
 	private String enfermedadPrevenida;
 	private int cantidadDosis;
 	
-	
 	public Vacuna(String marca, String paisDeOrigen, String enfermedadPrevenida, int cantidadDosis) {
 		super();
 		this.marca = marca;
@@ -15,41 +14,33 @@ public class Vacuna {
 		this.cantidadDosis = cantidadDosis;
 	}
 
-
 	public String getMarca() {
 		return marca;
 	}
-
 
 	public void setMarca(String marca) {
 		this.marca = marca;
 	}
 
-
 	public String getPaisDeOrigen() {
 		return paisDeOrigen;
 	}
-
 
 	public void setPaisDeOrigen(String paisDeOrigen) {
 		this.paisDeOrigen = paisDeOrigen;
 	}
 
-
 	public String getEnfermedadPrevenida() {
 		return enfermedadPrevenida;
 	}
-
 
 	public void setEnfermedadPrevenida(String enfermedadPrevenida) {
 		this.enfermedadPrevenida = enfermedadPrevenida;
 	}
 
-
 	public int getCantidadDosis() {
 		return cantidadDosis;
 	}
-
 
 	public void setCantidadDosis(int cantidadDosis) {
 		this.cantidadDosis = cantidadDosis;
@@ -67,5 +58,4 @@ public class Vacuna {
 		datosVacuna.append(cantidadDosis);
 		return datosVacuna.toString();
 	}
-
 }
