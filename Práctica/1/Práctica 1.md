@@ -10,11 +10,11 @@
 
 ### a) Sobre-escriba el método toString() de Object, para ello declare una variable local de tipo StringBuffer y utilícela para concatenar cada uno de los datos de la vacuna y retorne un objeto String con los datos del mismo.
 
-Resuelto en Eclipse (proyecto Java "Práctica_1").
+Resuelto en IntelliJ (proyecto Java "1").
 
 ### b) Escriba el método main() en la clase TestVacuna, donde se debe crear un arreglo con 5 objetos Vacuna inicializados, para luego recorrer el arreglo e imprimir en pantalla los objetos guardados en él.
 
-Resuelto en Eclipse (proyecto Java "Práctica_1").
+Resuelto en IntelliJ (proyecto Java "1").
 
 ### c) Comente el método toString() escrito en la clase Vacuna y vuelva a ejecutar el programa. ¿Cuál es la diferencia entre b) y c)?
 
@@ -181,11 +181,11 @@ public class Delta extends Alpha {
 
 ### a) Implemente los getters y setters para cada una de las variables de instancias anteriores.
 
-Resuelto en Eclipse (proyecto Java "Práctica_1").
+Resuelto en IntelliJ (proyecto Java "1").
 
 ### b) Implemente los constructores para las clases anteriores, todos ellos deben recibir los parámetros necesarios para inicializar las variables de instancia propias de la clase donde están definidos.
 
-Resuelto en Eclipse (proyecto Java "Práctica_1").
+Resuelto en IntelliJ (proyecto Java "1").
 
 ### c) ¿Pudo compilar las clases? ¿Qué problemas surgieron y por qué? ¿Cómo los solucionó?
 
@@ -291,7 +291,7 @@ La implementación dada tiene partes correctas y partes erradas:
 
 ## 4. Hay un número de casos donde se necesita tener una única instancia por clase, esto es lo que se conoce como el patrón Singleton. Implemente una clase que cumpla con este patrón llamada PoolConexiones, la misma debe proveer una manera para acceder a esa instancia. Piense en los modificadores de acceso del constructor y en los calificadores java que tiene disponibles, para buscar una solución.
 
-Resuelto en Eclipse (proyecto Java "Práctica_1").
+Resuelto en IntelliJ (proyecto Java "1").
 
 Básicamente, funciona de la siguiente manera:
 
@@ -313,7 +313,7 @@ Tenga en cuenta lo siguiente:
 -   La clase **PaintTest** debe crear una instancia de **Paint**, inicializarla y recorrerla. En cada iteración invoque el método **area()** sobre el elemento actual y **getRadio()**, sólo si se trata de un objeto de tipo **Circulo**.
 -   Construya un archivo jar ejecutable con las clases anteriores. El mismo debe poderse ejecutar como un programa haciendo doble click.
 
-Resuelto en Eclipse (proyecto Java "Práctica_1").
+Resuelto en IntelliJ (proyecto Java "1").
 
 ![Output ejercicio 5](https://i.imgur.com/vG4ZnMS.png)
 
