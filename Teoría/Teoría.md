@@ -290,9 +290,15 @@ public class Rectangulo extends Graphics implements Draggable {
 
 ---
 
-<h1 align="center">Clase 2 - ? de ?, 2024</h1>
+<h1 align="center">Clase 2 - 28 de agosto, 2024</h1>
 
-##
+## Interfaces
+
+## Clases abstractas
+
+## Herencia
+
+## Polimorfismo
 
 ---
 
