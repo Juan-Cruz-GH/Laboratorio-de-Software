@@ -18,7 +18,7 @@ Resuelto en Eclipse (proyecto Java "Práctica_1").
 
 ### c) Comente el método toString() escrito en la clase Vacuna y vuelva a ejecutar el programa. ¿Cuál es la diferencia entre b) y c)?
 
-Al comentar el método toString que sobreescribimos en el inciso b), cuando hacemos `System.out.println(vacuna)`, se ejecutará el método toString por defecto, cuya funcionalidad escribe el nombre del paquete, seguido del nombre de la clase del objeto, seguido de "@", seguido de la dirección de memoria, en hexadecimal, del objeto. Por ejemplo:
+Al comentar el método toString que sobreescribimos en el inciso b), cuando hacemos `System.out.println(vacuna)`, se ejecutará el método toString por defecto, cuya funcionalidad escribe el nombre del paquete, seguido del nombre de la clase del objeto, seguido de "@", seguido del hashcode, en hexadecimal, del objeto. Por ejemplo:
 
 ```java
 Práctica_1.Vacuna@50040f0c
@@ -110,7 +110,7 @@ class Beta {
 }
 ```
 
-✅ El código es válido y compilará sin problemas ya que las variables de instancia y métodos con especificador de acceso `public` **son visibles para todas las clases de cualquier paquete**. Como Alpha tiene una variable de intancia y un método públicos, Beta puede usarlos libremente.
+✅ El código es válido y compilará sin problemas ya que las variables de instancia y métodos con especificador de acceso `public` **son visibles para todas las clases de cualquier paquete**. Como Alpha tiene una variable de instancia y un método públicos, Beta puede usarlos libremente.
 
 ### c) Modifique la clase Alpha como se indica debajo. ¿Es válido el método de la clase Beta? Justifique.
 
