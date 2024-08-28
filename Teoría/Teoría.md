@@ -292,13 +292,36 @@ public class Rectangulo extends Graphics implements Draggable {
 
 <h1 align="center">Clase 2 - 28 de agosto, 2024</h1>
 
+## Herencia
+
+### Introducción
+
+-   La herencia permite crear una clase nueva como un **subtipo** de una clase.
+-   La herencia solo es apropiada cuando existe una relación de subtipo genuina entre la subclase y la superclae.
+-   Es "seguro" usar herencia dentro de un paquete donde las implementaciones de subclase y superclase están bajo el control de los mismos developers. Cuando este no es el caso, se puede generar "fragilidad de código" y otros problemas.
+
+        Buscar esto en Effective Java, 2da edición, item 18, favor composition over inheritance, pag 111. Resolver este problema, se entrega el miércoles que viene.
+
+### Clase Object
+
+-   Método equals()
+    ...
+-   Método hashCode()
+    ...
+-   Método toString()
+    ...
+
+### Cómo implementa Java la herencia?
+
+### Encadenamiento de constructores
+
+-   Una clase final tiene todos sus métodos final implicitamente.
+
+## Polimorfismo
+
 ## Interfaces
 
 ## Clases abstractas
-
-## Herencia
-
-## Polimorfismo
 
 ---
 
