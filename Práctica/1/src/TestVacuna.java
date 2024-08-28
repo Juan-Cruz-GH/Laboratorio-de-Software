@@ -1,7 +1,3 @@
-package Práctica_1;
-
-import java.util.Iterator;
-
 public class TestVacuna {
 
 	public static void main(String[] args) {

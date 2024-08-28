@@ -1,5 +1,3 @@
-package Práctica_1;
-
 public class Vacuna {
 	private String marca;
 	private String paisDeOrigen;

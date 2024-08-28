@@ -1,5 +1,3 @@
-package Práctica_1;
-
 public class PaintTest {
 
 	public static void main(String[] args) {

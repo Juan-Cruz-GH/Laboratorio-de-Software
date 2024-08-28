@@ -1,5 +1,3 @@
-package Práctica_1;
-
 public class Rectangulo extends FiguraGeometrica {
 	private int alto;
 	private int ancho;

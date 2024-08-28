@@ -1,5 +1,3 @@
-package Práctica_1;
-
 public class Paint {
 	private FiguraGeometrica[] paleta;
 	

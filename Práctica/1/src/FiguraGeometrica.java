@@ -1,5 +1,3 @@
-package Práctica_1;
-
 public abstract class FiguraGeometrica {
 	protected String color;
 	

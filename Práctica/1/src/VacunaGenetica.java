@@ -1,5 +1,3 @@
-package Práctica_1;
-
 public class VacunaGenetica extends Vacuna {
 	private int temperaturaMinima;
 	private int temperaturaMaxima;

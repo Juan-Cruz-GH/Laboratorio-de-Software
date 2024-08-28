@@ -1,5 +1,3 @@
-package Práctica_1;
-
 public class VacunaSubunidadAntigenica extends Vacuna {
 	private int cantidadAntigenos;
 	private String tipoProceso;
