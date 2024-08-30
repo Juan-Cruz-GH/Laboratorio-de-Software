@@ -33,6 +33,8 @@ class MisColores implements ColImpresion, ColArcoIris {
 }
 ```
 
+❌ Se produce un error por ambiguedad: cuando TodosLosColores hereda de ColImpresion y ColArcoIris, recibe la constante amarillo de ambos. Una interface no puede tener dos constantes con el mismo tipo y mismo nombre, por lo que no compila.
+
 ### b) Analice el código de la interface y las clases que la implementan. Determine si son legales o no. En caso de ser necesario, realice las correcciones que correspondan. ¿Cómo podría modificar el acceso afinar() para evitar realizar cambios en las clases que implementan IntrumentoMusical?
 
 ```java
@@ -42,7 +44,7 @@ public interface InstrumentoMusical {
   void afinar() { };
 }
 
-class abstract InstrumentoDeViento implements InstrumentoMusical {
+abstract class InstrumentoDeViento implements InstrumentoMusical {
   void hacerSonar() {
     System.out.println("Sonar Vientos");
   }
@@ -52,7 +54,40 @@ class abstract InstrumentoDeViento implements InstrumentoMusical {
 }
 
 class InstrumentoDeCuerda implements InstrumentoMusical {
-  void hacerSonar(){
+  void hacerSonar() {
+    System.out.println("Sonar Cuerdas");
+  }
+  public String queEs() {
+    return "Instrumento de Cuerda";
+  }
+}
+```
+
+❌ Hay varios errores:
+
+1. El método afinar() en la interface no puede tener implementación a no ser que sea declarado como default, lo cual no es el caso.
+2. Los métodos de una interface que no hereda de otras interfaces son siempre public, por ende las clases que implementan estos métodos deben implementarlos de forma public también: hay que agregar public en hacerSonar en ambas clases.
+
+Código corregido:
+
+```java
+public interface InstrumentoMusical {
+  void hacerSonar();
+  String queEs();
+  default void afinar() { };
+}
+
+abstract class InstrumentoDeViento implements InstrumentoMusical {
+  public void hacerSonar() {
+    System.out.println("Sonar Vientos");
+  }
+  public String queEs() {
+    return "Instrumento de Viento";
+  }
+}
+
+class InstrumentoDeCuerda implements InstrumentoMusical {
+  public void hacerSonar() {
     System.out.println("Sonar Cuerdas");
   }
   public String queEs() {
@@ -94,7 +129,13 @@ public class HashSetAgregados<E> extends HashSet<E> {
 }
 ```
 
+✅ El método `add()` parece funcionar bien, ya que al ejecutarlo dos veces con valores distintos, `getCantidadAgregados()` nos devuelve 2.
+
 ### a) Agregue a una instancia de HashSetAgregados los elementos de otra colección (mediante el método addAll). Invoque luego al método getCantidadAgregados. ¿La clase tiene el funcionamiento esperado? ¿Por qué? ¿Tiene relación con la herencia?
+
+❌ El método `addAll()` tiene algun problema, ya que al pasarle una lista de 3 elementos, `getCantidadAgregados()` nos dice que ahora hay el doble, 6 más en vez de 3.
+
+Esto se debe a ???
 
 ### b) Diseñe e implemente una alternativa para HashSetAgregados. ¿Qué interface usaría? ¿Qué ventajas proporcionaría esta nueva implementación respecto de la original?
 
