@@ -292,40 +292,173 @@ public class Rectangulo extends Graphics implements Draggable {
 
 <h1 align="center">Clase 2 - 28 de agosto, 2024</h1>
 
+## Clase Object
+
+### Método equals()
+
+-   Por defecto, este método retorna V o F cuando dos objetos apuntan a la misma dirección de memoria.
+-   Como este comportamiento no suele ser útil, se suele sobreescribir este método en las clases con implementaciones personalizadas del mismo, por ejemplo comparando si un objeto posee los mismos valores que otro en todas sus variables de instancia.
+-   Dicho de otra forma, se recomienda sobreescribir este método cuando las instancias de una clase tienen una **noción de igualdad lógica que difiere de la identidad o referencias de esas instancias**. Este es generalmente el caso de clases que representan valores, como por ejemplo las clases Integer, String de la API de JAVA.
+
+### Método hashCode()
+
+-   Retorna un código de hasheo HEX asociado a la dirección de memoria donde está alojado el objeto.
+-   Este método se debe sobreescribir siempre que se haya sobreescrito el `equals()` y tengamos objetos que serán alojados en colecciones basadas en hashing como HashMap, HashSet, HashTable.
+-   Esto es porque una correcta sobrescritura del método hashCode() asegura que dos instancias lógicamente iguales tengan el mismo hashcode y en consecuencia las estructuras de datos basadas en hashing que almacenan y recuperan estos objetos, funcionarán correcta y eficientemente.
+-   Dicho esto, incluso si no usamos estas colecciones, sigue siendo buena práctica sobreescribir el `hashCode()` siempre que hayamos sobreescrito el `equals()` para que se respete la lógica: si dos objetos son iguales según el método `equals()` entonces invocar al método `hashCode()` sobre cada uno de estos objetos, debe producir el **mismo valor**.
+
+### Método toString()
+
+-   Retorna un string formado por el nombre completo de la clase, seguido de @ más la representación HEX del código hash del objeto.
+-   Este método se invoca implícitamente en los métodos `print()`, `println()`, etc.
+-   Es una buena práctica sobreesscribir el método `toString()` para devolver un string que represente de forma más amigable al objeto en cuestión.
+
 ## Herencia
 
 ### Introducción
 
 -   La herencia permite crear una clase nueva como un **subtipo** de una clase.
--   La herencia solo es apropiada cuando existe una relación de subtipo genuina entre la subclase y la superclae.
--   Es "seguro" usar herencia dentro de un paquete donde las implementaciones de subclase y superclase están bajo el control de los mismos developers. Cuando este no es el caso, se puede generar "fragilidad de código" y otros problemas.
-
-        Buscar esto en Effective Java, 2da edición, item 18, favor composition over inheritance, pag 111. Resolver este problema, se entrega el miércoles que viene.
-
-### Clase Object
-
--   Método equals()
-    ...
--   Método hashCode()
-    ...
--   Método toString()
-    ...
-
-### Cómo implementa Java la herencia?
+-   La subclase **hereda** de su superclase todos sus métodos y variables de instancia que no **sean privados**.
+-   En Java, el compilador hace un montón de cosas relacionadas a la herencia implícitamente.
+-   La herencia solo es **apropiada cuando existe una relación de subtipo genuina** entre la subclase y la superclae.
+-   Es **"seguro"** usar herencia dentro de un paquete donde las implementaciones de subclase y superclase están bajo el control de los mismos developers. Cuando este no es el caso, se puede generar "fragilidad de código" y otros problemas.
 
 ### Encadenamiento de constructores
 
--   Una clase final tiene todos sus métodos final implicitamente.
+-   Un objeto de la subclase incluye un objeto de la clase padre.
+-   Como es esencial que el objeto de la subclase se inicialice correctamente, el constructor de la subclase siempre invoca al constructor de la superclase.
+-   Si la superclase a su vez es una subclase de otra superclase, se sigue la cadena: se invocan todos los constructores de la cadena de herencia.
+-   El compilador Java silenciosamente invoca al constructor nulo o de default de la clase base en el constructor de la clase derivada (si no se lo invocó explícitamente). La invocación es automática.
+-   Relacionado a lo anterior, hay una restricción: si una clase define constructores con argumentos y NO define al constructor nulo, **todas sus subclases deben definir constructores que invoquen explícitamente a los constructores con argumentos**, o se producirá un error de compilación.
+-   Como todas las clases heredan de Object implícitamente, la última clase en la cadena de herencia invoca al constructor de Object.
+-   Un constructor invoca al constructor de su superclase con el método `super()`.
 
-## Polimorfismo
+### Upcasting - Polimorfismo
 
-## Interfaces
+-   Java soporta la relación "es un" entre la clase derivada y la clase base. Por ejemplo, si tenemos de clase derivada Perro y clase base Animal → Perro es un Animal.
+-   El Upcasting es la **conversión de la referencia a un objeto de la clase derivada en una referencia a un objeto de la clase base**.
+-   El Upcasting es seguro: la clase derivada es un super conjunto de la clase base, podría contener más métodos que la clase base, pero seguro contiene los métodos de la clase base.
+
+### Polimorfismo
+
+-   El polimorfismo en Java se logra vía **binding dinámico**, que es la asociación entre la invocación a un método y el código que se ejecutará. Básicamente, el compilador busca el tipo real del objeto y ejecuta el método de su clase, no de su superclase, por más que ambos métodos se llamen igual.
+-   Todos los métodos de una clase `final` (una clase `final` tiene todos sus métodos `final` implicitamente), todos los métodos declarados `final`, `private` o `static` son invocados **sin usar Dynamic Binding**. Las invocaciones a estos métodos son candidatas a ser optimizadas (por ej. usar inlining).
+
+### Sobreescritura de métodos
+
+-   Cualquier método que se herede (siempre que no sea privado ni final) de una superclase puede ser sobreescrito en las subclases.
+-   Los métodos sobreescritos en una subclase deben tener el mismo nombre, la misma lista de argumentos (en cuanto a tipo y orden) y el mismo tipo de retorno que los declarados en la superclase. El tipo de retorno es covariante, de esta manera el tipo de retorno puede ser una subclase del tipo de retorno del método original.
+-   El **nivel de acceso de un método sobreescrito debe ser igual o menos restrictivo que el declarado en la superclase**. Por ejemplo: si en la superclase el método es declarado `public` entonces el método sobreescrito en la subclase debe declararse `public`. Si en la superclase el método es declarado `protected` o `default`, en la subclase puede declararse `public`.
+-   Las excepciones son clases especializadas que representan errores que pueden ocurrir durante la ejecución de un método. Los métodos sobreescritos deben disparar **las mismas excepciones o subclases de las excepciones disparadas por el método original**. No pueden disparar otras excepciones.
+
+### Constructores y polimorfismo
+
+-   Los constructores en Java no son polimórficos. Son implícitamente `static`.
+-   Buena práctica para constructores:
+    -   Los constructores no deben invocar a métodos que fueron sobreescritos.
+    -   Los únicos métodos que son **seguros** para invocar en el cuerpo de un constructor son los declarados `final` en la clase base o `private` (que son automáticamente `final`). Estos métodos no pueden sobreescribirse y por lo tanto funcionan correctamente.
+
+### Ocultar atributos de la superclase
+
+-   Cuando una subclase declara un atributo con el mismo tipo y nombre que uno de la superclase, está "ocultando" el atributo que hereda de su superclase.
+-   Esto significa que cuando la subclase manipula esta variable de instancia con `variable = X` o `this.variable = X`, se está refiriendo a SU variable de instancia, y no la que heredó. Solo podemos referirnos a la variable de la superclase con `super.variable = X`.
+-   Esto mismo se puede hacer también con variables de clase.
+-   Los métodos de clase de la misma manera que los atributos pueden ocultarse por una subclase, **pero NO sobreescribirse**. NO son un reemplazo.
 
 ## Clases abstractas
 
----
+-   Son clases no instanciables pero extendibles.
+-   Representan un concepto abstracto, expresan la interface de un objeto y no una implementación particular.
+-   Se declaran con `abstract class Clase`.
+-   Pueden tener métodos abstractos y métodos con implementación.
+-   Los métodos abstractos solo poseen declaración y carecen de cuerpo: `abstract void unMétodoAbstracto();`.
+-   Una clase que posea al menos un método abstracto **debe** declararse `abstract` o el programa no compilará.
+-   Las clases que extienden de una clase `abstract` **deben** proveer una implementación concreta para todos los métodos abstractos de la clase `abstract`. Caso contrario, el programa no compila.
 
-<h1 align="center">Clase 3 - ? de ?, 2024</h1>
+## Interfaces
+
+### Introducción
+
+-   Una interface es un dispositivo o sistema que permite a entidades no relacionadas interactuar entre sí.
+-   Es una colección de definiciones de métodos sin implementación y de declaraciones de constantes agrupadas bajo un nombre.
+-   Son abstractas.
+-   Definen un tipo de dato, por lo tanto es posible declarar variables con el nombre de la interface por más que no se puedan instanciar. Ejemplo: `Centrable c;`, donde c hace referencia a un objeto de cualquier clase que implemente la interface `Centrable`.
+-   No proveen implementación para los tipos que definen, si no un mecanismo de herencia de comportamiento.
+-   No son instanciables.
+-   Las clases pueden implementar interfaces: cuando lo hacen tienen disponible las constantes declaradas en la interface y deben implementar cada uno de los métodos declarados en la interface. Una instancia de dicha clase es del tipo de la clase y de la interface.
+-   Las interfaces permiten que objetos que no comparten la misma jerarquía de herencia sean del mismo tipo en virtud de implementar la misma interface.
+-   Una interface no puede definir variables de instancia. Las variables de instancia son detalles de implementación y las interfaces son una especificación sin implementación. Las únicas variables permitidas en la definición de una interface son constantes de clase, que se declaran `static` y `final`.
+
+### Sintaxis
+
+```java
+interface nombreInterface extends superInterface1, superInterface2, superInterfaceN {
+    // Declaración de métodos: implícitamente public abstract
+    // Declaración de constantes: implícitamente public static final
+}
+```
+
+### Especificadores de acceso
+
+-   El especificador de acceso public establece que la interface puede ser usada por cualquier clase o interface de cualquier paquete, es parte de la API que se exporta.
+-   Si se omite el especificador de acceso, la interface solamente puede ser usada por las clases e interfaces contenidas en el mismo paquete que la interface declarada, visibilidad de `package`, NO es parte de la API que se exporta, es parte de la implementación.
+
+### Estructura interna
+
+-   Las interfaces poseen métodos, que son siempre `public abstract`, y constantes, que son siempre `public static final`.
+
+### Herencia
+
+-   Una interface puede extender de múltiples interfaces. Por lo tanto se tiene **herencia múltiple de interfaces**.
+-   No existe una interface de la cual todas las interfaces sean extensiones: **no hay un análogo a la clase Object en interfaces**.
+-   Las interfaces proveen una alternativa limitada y poderosa a la herencia múltiple. **Las clases en JAVA pueden heredar de una única clase pero pueden implementar múltiples interfaces**.
+-   Una interface hereda todas las constantes y métodos de sus superInterfaces, y puede definir nuevos métodos y constantes propios.
+-   Una clase que implementa una interface debe implementar todos los métodos abstractos definidos por la interface, **así como todos los métodos abstractos heredados de las superinterfaces de esa interface**.
+
+### Sobreescritura
+
+-   La declaración de un método en una interface sobreescribe a todos aquellos que tienen la misma firma que en sus superinterfaces.
+-   Hay error de compilación si el tipo de retorno del método sobreescrito no es subtipo del retornado por el método original.
+-   El método sobreescrito no debe tener claúsulas throws que causen conflicto con alguno de los métodos que sobreescribe.
+
+### Colisión de nombres
+
+```java
+public interface B {
+    int W = 5;
+}
+
+public interface C {
+    int W = 10;
+}
+
+public interface A extends B, C {
+    int Z = J * W + 5;
+}
+```
+
+-   Se produce un error por haber ambiguedad en cuanto a qué "W" se está referenciando en la interface A, si la heredada de la interface B o la C.
+-   Se soluciona usando el nombre completo del atributo.
+
+### Métodos default a partir de Java 8
+
+-   Antes de Java 8, si se agregaba un método nuevo a una interface que una clase implementaba, ahora esa clase ya no podía compilar por no haber implementado este nuevo método. Esto trajo problemas ya que se tendría que actualizar la interface y todas las clases que implementan esa interface "al mismo tiempo" lo cual no es viable en proyectos grandes.
+-   Java 8 solucionó esto incoporando métodos default/defender/virtuales.
+-   Los métodos default contienen una implementación predeterminada que utilizan todas las clases que implementan la interface y que no implementan el método de default.
+-   Sin embargo, se recomienda evitar el uso de este tipo de métodos.
+
+## Interfaces vs clases abstractas
+
+-   Las interfaces y las clases abstractas proveen una interface de comportamiento común.
+-   A partir de JAVA 8, las interfaces pueden proveer **implementaciones para algunos métodos de instancia**. En este sentido podríamos decir que tanto las interfaces como las clases abstractas proveen herencia de comportamiento y de implementación.
+-   En ninguna de las dos se puede crear instancias.
+-   Para implementar un tipo definido por una clase abstracta es necesario extender a la clase abstracta, **se fuerza una relación de herencia**. Sin embargo, **cualquier clase puede implementar una interface** independientemente de la jerarquía de herencia a la que pertenezca.
+-   Las interfaces son ideales para definir “mezclas”: una "mezcla" es un tipo que una clase puede implementar además de su tipo primario. Ejemplo: La interface Comparable permite que una funcionalidad (ordenación) se pueda mezclar con su función primaria. Con clases abstractas no pueden definir este tipo de comportamiento.
+-   Agregar nuevas definiciones de métodos en interfaces que forman parte de la API pública ocasiona problemas de incompatibilidad con el código existente. Las clases abstractas pueden agregar métodos no-abstractos sin romper el código de las clases que las extienden (a veces lo rompen). JAVA 8 soluciona el problema de incompatilidad de las interfaces (polémico?).
+-   En algunas situaciones la elección es de diseño.
+-   Es posible **combinar** clases abstractas e interfaces: **definir un tipo como una interface y luego una clase abstracta que la implementa parcialmente, proveyendo implementaciones por defecto que las subclases aprovecharán (skeletal implementation)**. Patrón Template Method.
+
+<h1 align="center">Clase 3 - 4 de septiembre, 2024</h1>
 
 ##
 
