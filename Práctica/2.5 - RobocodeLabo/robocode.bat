@@ -21,7 +21,7 @@ call set_java_options.bat
 @rem Run Robocode
 
 java ^
-  -DNOSECURITY=true	
+  -DNOSECURITY=true ^
   -cp "libs/*;robots" ^
   -Xmx512M ^
   -XX:+IgnoreUnrecognizedVMOptions ^

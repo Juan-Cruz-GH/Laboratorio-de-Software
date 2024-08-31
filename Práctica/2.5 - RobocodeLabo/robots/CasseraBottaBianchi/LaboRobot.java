@@ -1,15 +1,16 @@
-package laboratorio;
+package CasseraBottaBianchi;
 import robocode.*;
 
 public class LaboRobot extends JuniorRobot
 {
-	private RobotStrategy strategy = new UnaEstrategia();
+	private RobotStrategy strategy = new EstrategiaGanadora(this);
 
 	public void setStrategy(RobotStrategy strategy) {
 		this.strategy = strategy;
 	}
 	@Override
 	public void run() {
+		setColors(orange, blue, white, yellow, black);
 		this.strategy.run();
 	}
 
