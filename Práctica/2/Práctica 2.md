@@ -133,16 +133,30 @@ public class HashSetAgregados<E> extends HashSet<E> {
 
 ### a) Agregue a una instancia de HashSetAgregados los elementos de otra colección (mediante el método addAll). Invoque luego al método getCantidadAgregados. ¿La clase tiene el funcionamiento esperado? ¿Por qué? ¿Tiene relación con la herencia?
 
-❌ El método `addAll()` tiene algun problema, ya que al pasarle una lista de 3 elementos, `getCantidadAgregados()` nos dice que ahora hay el doble, 6 más en vez de 3.
+❌ El método `addAll()` tiene un problema, ya que al pasarle una lista de 3 elementos, `getCantidadAgregados()` nos dice que ahora hay el doble, 6 más en vez de 3.
 
-Esto se debe a ???
+Esto se debe a que cuando `addAll()` ejecuta el `super.addAll()`, este método de su clase padre internamente luego ejecuta el `add()` de nuestra clase ya que nuestra clase sobreescribió este método, que en nuestro caso vuelve a aumentar cantidadAgregados.
 
 ### b) Diseñe e implemente una alternativa para HashSetAgregados. ¿Qué interface usaría? ¿Qué ventajas proporcionaría esta nueva implementación respecto de la original?
 
+Resuelto en el código. Mi solución alternativa sería usar composición en vez de herencia: que HashSetAgregados **tenga** un HashSet internamente, no que herede de HashSet.
+
 ### c) Se desea implementar otro tipo especial de Set con la característica de poder consultar la cantidad total de elementos que se removieron del mismo. Diseñe e implemente una solución que permita fácilmente definir nuevos tipos de Set con distintas características.
+
+Resuelto en el código. "Diseñe e implemente una solución que permita fácilmente definir nuevos tipos de Set con distintas características." ???
 
 ## 4. Redefina las clases del ejercicio 6 de la práctica 1 de manera que las figuras se puedan serializar.
 
+Resuelto en el código.
+
 ### a) ¿Cómo se serializa un objeto? ¿Con qué fin?
 
+En Java, un objeto se serializa implementando la interface **Serializable** (que es una interface de tipo marker, es decir no tiene métodos) y luego utilizando un objeto de la clase ObjectOutputStream.
+
+Los objetos se pueden serializar con el propósito de persistirlos en un archivo en disco o en una base de datos, o enviarlos por red.
+
 ### b) ¿Qué relación tiene con el serialVersionUID? Analice su impacto al modificar la implementación de las clases.
+
+El serialVersionUID es un identificador único para cada clase que implementa Serializable que se utiliza en el proceso de de-serialización. Si no lo agregamos explícitamente, Java crea uno implícitamente de forma automática, basado en la estructura de la clase.
+
+Sin embargo, se recomienda declararlo explícitamente para evitar problemas, ya que al modificar la implementación de la clase, Java también cambiará nuestro UID implícito lo cual podría romper compatibilidad con objetos serializados con versiones previas de la clase.

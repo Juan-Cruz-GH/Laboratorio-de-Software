@@ -1,4 +1,6 @@
-public abstract class FiguraGeometrica {
+import java.io.Serializable;
+
+public abstract class FiguraGeometrica implements Serializable {
 	protected String color;
 	
 	public FiguraGeometrica(String color) {
