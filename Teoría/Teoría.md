@@ -460,7 +460,14 @@ public interface A extends B, C {
 
 <h1 align="center">Clase 3 - 4 de septiembre, 2024</h1>
 
-##
+## Clases anidadas y clases internas
+
+### Introducción
+
+-   Las clases anidadas e internas son clases definidas dentro de otras clases.
+-
+
+###
 
 ---
 
