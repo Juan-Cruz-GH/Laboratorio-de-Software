@@ -460,19 +460,144 @@ public interface A extends B, C {
 
 <h1 align="center">Clase 3 - 4 de septiembre, 2024</h1>
 
-## Clases anidadas y clases internas
+## Clases anidadas
 
 ### Introducción
 
--   Las clases anidadas e internas son clases definidas dentro de otras clases.
--
+-   Las clases anidadas son clases **definidas dentro de otras clases**.
+-   Solo sirven para la clase donde están definidas, por fuera "no existen".
+-   Pueden ser `private` o `protected`. Si son private, solo son accesibles por su clase contenedora (pero no serían accesibles para otras clases anidadas dentro de esa misma clase contenedora).
+-   Tienen acceso a toda la implementación de la clase que las contiene (variables de instancia, variables de clase, y métodos) incluso si son `private`.
+-   Son similares a los métodos de instancia/variables de instancia. Sus instancias se asocian a cada instancia de la clase que las contiene.
 
-###
+### Alternativa
+
+-   Podemos ocultar una clase **sin usar clases anidadas** definiendo a una clase con acceso default/package, de modo que solo será visible dentro del paquete donde se declaró.
+
+### Usos
+
+-   Las clases anidadas se usan para ocultar detalles de implementación.
+-   En el framework de colecciones de Java, se usan clases anidadas para implementar:
+    -   **Iterators**, que acceden a los elementos de la colección secuencialmente sin exponer la representación interna. Se usan en List y Set.
+    -   **Adapters**, que permiten a las implementaciones de Map implementar sus vistas de colección, mediante métodos de Map.
+
+### Cómo acceden a los miembros de la clase contenedora?
+
+-   Un objeto de una clase anidada tiene implícitamente una referencia al objeto de la clase que lo instanció (clase contenedora). Es a través de ésta referencia oculta que tiene acceso al estado completo del objeto contenedor, incluyendo sus datos privados.
+-   El compilador es quien agrega esta ref. implícita en el constructor de la clase anidada.
+-   Siempre un objeto de una clase anidada está asociado con un objeto de la clase contenedora: la construcción de un objeto de la clase anidada **requiere** de la referencia al objeto de la clase contenedora.
+
+### Como nombrar al objeto de la clase contenedora?
+
+-   Si el nombre de la variable/método de la clase contenedora no está repetido en nuestra clase anidada, podemos acceder directamente.
+-   En caso contrario, podemos acceder vía NombreClaseContedora.this.variableOMetodo.
+
+### Objetos función
+
+-   Java no soporta funciones (métodos que no están dentro de ninguna clase) ni referencias a funciones.
+-   Un objeto-función es una **instancia de una clase que exporta métodos que realizan operaciones sobre otros objetos que se pasan como parámetros**.
+-   Usar clases anónimas en algunas circunstancias creará un objeto nuevo cada vez, por ejemplo si se ejecuta repetitivamente. Una solución más eficiente consiste en **guardar la referencia al objeto función en una constante de clase y reusarla cada vez que se necesita**.
+-   Los objetos-función permiten implementar el patrón Strategy. Este patrón se implementa declarando una interface que representa la estrategia y estrategias concretas (diferentes clases) que implementan dicha interface.
+    -   Si la estrategia concreta se usa sólo una vez, entonces se declara e instancia como una clase anónima.
+    -   Si una estrategia concreta se usa repetitivamente es conveniente definirla como una clase interna privada y exportar la estrategia mediante una constante pública de clase del tipo de la interface.
+    -   De esta manera es posible intercambiar en ejecucíón las estrategias.
+
+## Clases internas
+
+### Introducción
+
+-   Son como las clases anidadas solo que además son `static`.
+-   Tienen acceso a todos los miembros declarados `static` de la clase que las contiene, incluso si son `private`.
+-   Un objeto de una clase interna **no** tiene implícitamente una referencia al objeto de la clase que lo instanció (clase contenedora). Es por esto que no tienen acceso a las variables y métodos de instancia de su clase contenedora.
+
+### Patrón builder
+
+-   El Builder es un patrón que permite crear/construir/instanciar objetos complejos de a poco, paso por paso.
+-   Se puede implementar este patrón creando una clase interna estática Builder dentro de nuestra clase contenedora.
+
+## Clases locales
+
+### Introducción
+
+-   Son clases definidas dentro de un método o de un bloque de código.
+-   No usan especificador de acceso (no pueden declararse `public`, `protected`, `private` ni `static`) dado que su alcance está completamente restringido al bloque de código donde están definidas, es decir, **solo son visibles dentro de ese bloque de código**.
+-   Las interfaces y enums **no pueden definirse localmente**.
+-   Las instancias de clases locales pueden acceder a todos los miembros de la clase contenedora, al igual que ocurría con las clases anidadas.
+
+## Clases anónimas
+
+### Introducción
+
+-   Son clases locales pero sin nombre.
+-   Se crean extendiendo una clase o implementando una interface.
+-   Combinan la sintaxis de definición de clase con la de instanciación, es decir, son simultáneamente declaradas e instanciadas en el punto donde se van a usar.
+-   Solo tienen acceso a las variables locales del bloque de código donde fueron declaradas.
+-   Las variables locales, parámetros de métodos y parámetros de manejadores de excepciones que se usan en las clases locales y anónimas son [efectivamente final](https://medium.com/@itsandip1/understanding-javas-effectively-final-variables-61e03a0be93a).
+-   No se les puede definir un constructor ya que esto requiere que la clase tenga nombre, en su lugar se usan **bloques de inicialización**. Solo se puede definir un bloque de este tipo.
+-   Solo pueden **extender una clase** o **implementar una sola interface**. No pueden hacer ambas.
+-   Las interfaces y enums **no pueden definirse anónimamente**.
+
+```java
+public Datos info(int x) {
+    return new Datos(x) {
+        public int valor() {
+            return super.valor() * 50;
+        }
+    };
+}
+
+// Es equivalente a:
+
+public Datos info(int x) {
+    class MisDatos extends Datos {
+        public MisDatos(int y) {
+            super(y);
+        }
+        public int valor() {
+            return super.valor() * 50;
+        }
+    }
+    return new MisDatos(x);
+}
+```
+
+### Lambdas
+
+-   A partir de JAVA 8 las interfaces con un único método que no requieren del estado de un objeto son **especiales** y merecen un tratamiento especial.
+-   Estas interfaces se conocen como **interfaces funcionales**, que pueden **ser implementadas por lambdas**.
+-   Los lambdas son similares a las clases anónimas en cuanto a su función, pero mucho más concisas.
+
+```java
+Collections.sort(arreglo,
+ (s1, s2) -> Integer.compare(s1.length(), s2.length()));
+```
 
 ---
 
-<h1 align="center">Clase 4 - ? de ?, 2024</h1>
+<h1 align="center">Clase 4 - 18 de septiembre, 2024</h1>
 
-##
+## Tipos enumerativos
+
+## Genéricos
+
+---
+
+<h1 align="center">Clase 5 - 2 de octubre, 2024</h1>
+
+---
+
+<h1 align="center">Clase 6 - 9 de octubre, 2024</h1>
+
+---
+
+<h1 align="center">Clase 7 - 16 de octubre, 2024</h1>
+
+---
+
+<h1 align="center">Clase 8 - 23 de octubre, 2024</h1>
+
+---
+
+<h1 align="center">Clase 9 - 6 de noviembre, 2024</h1>
 
 ---
