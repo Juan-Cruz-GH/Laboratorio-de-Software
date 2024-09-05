@@ -10,6 +10,7 @@
 
 -   Hay 5 instancias de evaluación parcial: 2 individuales y 3 grupales (proyecto integrador).
 -   Se aprueba con mínimo 4 en cada una de las 5 evaluaciones parciales.
+-   Los talleres tienen nota de concepto, que se usa en caso que no llegues con tus notas en los parciales.
 
 ## Cómo se aprueba la promoción?
 
