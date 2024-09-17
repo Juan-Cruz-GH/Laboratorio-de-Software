@@ -3,7 +3,6 @@
 ## Importante
 
 -   [Material de la cátedra](https://catedras.linti.unlp.edu.ar/course/view.php?id=1247)
--   [Entrega taller de robots - parte 2 (Lunes 16 de septiembre)](https://catedras.linti.unlp.edu.ar/mod/assign/view.php?id=41159)
 -   [OpenJDK (22.0.1)](https://jdk.java.net/archive/)
 
 ## Cómo se aprueba la cursada?
