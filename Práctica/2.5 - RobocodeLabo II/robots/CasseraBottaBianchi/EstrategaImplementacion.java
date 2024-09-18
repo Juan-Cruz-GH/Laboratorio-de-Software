@@ -5,6 +5,10 @@ public class EstrategaImplementacion implements Estratega {
     private static Defensa estrategiaDefensa = new Defensa();
     private static EstrategaImplementacion instance;
 
+    private EstrategaImplementacion() {
+        
+    }
+
     public static EstrategaImplementacion getInstance() {
         // Patrón Singleton.
         if (instance == null) {
