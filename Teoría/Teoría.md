@@ -578,6 +578,55 @@ Collections.sort(arreglo,
 
 ## Tipos enumerativos
 
+### Introducción
+
+-   Los tipos enumerativos se introdujeron por primera vez en Java en la versión 5.0.
+-   Son un **tipo especial de clases**, un **tipo de datos que tiene asociado un conjunto de valores finito y acotado**.
+-   Declaración:
+
+```java
+package labo;
+
+public enum Estados { CONECTANDO, LEYENDO, LISTO, ERROR;}
+
+// Se referencian sus valores con: Estados.CONECTANDO Estados.LEYENDO Estados.LISTO Estados.ERROR
+```
+
+-   Sus valores:
+    -   Son instancias del enum.
+    -   Son llamados "valores enumerados" o "constantes enum".
+    -   Por convención, se escriben en MAYÚSCULAS.
+    -   Son implícitamente `public static final`.
+-   A un enum se le pueden asignar solo uno de sus valores definidos en su estructura interna, o null. Nada más.
+-   Los enums proveen seguridad de tipos: el compilador puede chequear si a un método se le pasa un objeto de tipo enum.
+
+### Implementación en Java
+
+-   Cuando se crea un enum, el compilador crea una clase que extiende de java.lang.Enum. No se puede extender la clase Enum para crear un enum propio.
+-   Los enums **no tienen constructores públicos**. Sus unicas instancias son las que se declaran internamente.
+-   Los enums pueden implementar interfaces. Por defecto, implementan las interfaces Comparable y Serializable.
+-   No pueden extenderse.
+
+### Métodos
+
+-   `final int compareTo()`: establece un orden entre los valores enumerados de acuerdo al **orden en que aparecen en la declaración**.
+-   `final boolean equals(Object other)`: es seguro comparar valores enumerativos usando el operador == en lugar del método equals() dado que el conjunto de valores posible es limitado. El método equals() internamente usa el operador ==.
+-   `final String name()`: devuelve el nombre de la constante enum.
+-   `final int ordinal()`: devuelve la posición del enum según está declarado.
+-   `String toString()`: devuelve el nombre de la instancia del enum.
+-   `static values()`: devuelve en un arreglo todos los valores del enum en el orden en que fueron declarados.
+-   Constructores internos: los objetos del enum pueden tener datos dentro, los cuales se declaran, y se inicializan en un constructor interno.
+-   Los enums pueden también tener métodos que retornan los valores de los atributos de los objetos del enum.
+
+### EnumMap y EnumSet
+
+-   La clase java.util.EnumMap es una implementación específica de Map que requiere como key un enum. Su utilidad es que nos permite acotar el conjunto de keys que el Map tendrá.
+-   La clase java.util.EnumSet es una implementación específica de Set adaptada a valores de tipo enum.
+
+### Comportamiento propio de cada constante enumerativa
+
+-   Es posible asociar comportamiento diferente con cada constante enumerativa asociando un método "{ ... }" al momento de declarar la instancia del enum.
+
 ## Genéricos
 
 ---
