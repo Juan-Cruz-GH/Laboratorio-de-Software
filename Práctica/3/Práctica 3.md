@@ -23,13 +23,25 @@ public class Stack {
 
 ### a) Implemente un método main() para probar la pila. Agregue Strings a la pila y recórrala para imprimir sus valores. ¿Cuántas veces puede recorrerla?
 
+Resuelto en IntelliJ, proyecto "3".
+
+Solo se puede recorrer una vez ya que el pop() no solo devuelve el elemento en el tope de la pila si no que además lo borra.
+
 ### b) Agregue una clase anidada llamada StackIterator que provea un objeto de tipo Iterator para recorrer la pila.
+
+Resuelto en IntelliJ, proyecto "3".
 
 ### c) Agregue en la clase Stack un método para que retorne una instancia de StackIterator. ¿Cuántas veces puede recorrer la pila ahora?
 
+??
+
 ### d) ¿Es posible crear objetos StackIterator desde una clase diferente a la clase Stack con el operador new?, ¿cómo lo hace?
 
+??
+
 ### e) ¿Cómo haría para evitar crear instancias de una clase anidada desde una clase que no sea la que la definió?
+
+??
 
 ## 2. Analice el código que figura debajo:
 
@@ -39,13 +51,13 @@ class InnerStatic {
     static class Circulo {
         static double radio = 2;
         static double getArea() {
-            double a = PI * Math.pow(radio, 2)
-            System.out.println("El area es: " + a)
+            double a = PI * Math.pow(radio, 2);
+            System.out.println("El area es: " + a);
             return a;
         }
         static double getLongitudCircunferencia() {
             double l = 2 * PI * radio;
-            System.out.println("La longitud es: " + l)
+            System.out.println("La longitud es: " + l);
             return l;
         }
     }
@@ -54,9 +66,35 @@ class InnerStatic {
 
 ### a) Modifique el código de la clase interna estática para que el valor inicial del radio sea ingresado por el usuario en el momento de la ejecución.
 
-### b) Defina una clase llamada InnerTest en el paquete practica3 con un método main()que imprime en la pantalla el área y la longitud de la circunferencia. Ejecútela varias veces ingresando distintos radios.
+Resuelto en IntelliJ, proyecto "3".
 
-### c) Remplazar PI* Math.pow(radio,2) por PI* pow(radio,2), siendo pow() el método de la clase java.lang.Math.
+### b) Defina una clase llamada InnerTest en el paquete practica3 con un método main() que imprime en la pantalla el área y la longitud de la circunferencia. Ejecútela varias veces ingresando distintos radios.
+
+Resuelto en IntelliJ, proyecto "3".
+
+```
+3
+El area es: 28.2744
+La longitud es: 18.8496
+```
+
+```
+1
+El area es: 3.1416
+La longitud es: 6.2832
+```
+
+```
+5
+El area es: 78.53999999999999
+La longitud es: 31.416
+```
+
+### c) Remplazar PI \* Math.pow(radio,2) por PI \* pow(radio,2), siendo pow() el método de la clase java.lang.Math.
+
+Resuelto en IntelliJ, proyecto "3".
+
+Para lograr esto hacemos `import static java.lang.Math.pow;`.
 
 ## 3. Implemente una clase llamada StringConverterSet como subclase de AbstractSet, la cual permita realizar todas las operaciones contempladas para los Set, con la salvedad que el método iterator() retorne un Iterator que al recorrelo devuelva cada uno de los elementos como Strings. Para su solución, defina un Adapter llamado IteratorStringAdapter como una clase anidada de StringConverterSet para cumplir lo solicitado.
 
