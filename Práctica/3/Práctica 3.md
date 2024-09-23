@@ -29,7 +29,7 @@ Solo se puede recorrer una vez ya que el pop() no solo devuelve el elemento en e
 
 ### b) Agregue una clase anidada llamada StackIterator que provea un objeto de tipo Iterator para recorrer la pila.
 
-Resuelto en IntelliJ, proyecto "3".
+??
 
 ### c) Agregue en la clase Stack un método para que retorne una instancia de StackIterator. ¿Cuántas veces puede recorrer la pila ahora?
 
@@ -96,27 +96,60 @@ Resuelto en IntelliJ, proyecto "3".
 
 Para lograr esto hacemos `import static java.lang.Math.pow;`.
 
-## 3. Implemente una clase llamada StringConverterSet como subclase de AbstractSet, la cual permita realizar todas las operaciones contempladas para los Set, con la salvedad que el método iterator() retorne un Iterator que al recorrelo devuelva cada uno de los elementos como Strings. Para su solución, defina un Adapter llamado IteratorStringAdapter como una clase anidada de StringConverterSet para cumplir lo solicitado.
+## 3. Implemente una clase llamada StringConverterSet como subclase de AbstractSet, la cual permita realizar todas las operaciones contempladas para los Set, con la salvedad que el método iterator() retorne un Iterator que al recorrerlo devuelva cada uno de los elementos como Strings. Para su solución, defina un Adapter llamado IteratorStringAdapter como una clase anidada de StringConverterSet para cumplir lo solicitado.
+
+Resuelto en IntelliJ, proyecto "3".
+
+Lo resolví haciendo que el método `iterator()` de StringConverterSet (que es el método que se llama en los foreach, por ejemplo) devuelva una instancia de IteratorStringAdapter, que es su clase anidada.
+
+La clase anidada IteratorStringAdapter tiene un `Iterator<String>` y sobreescribe el método `hasNext()` de forma típica, y `next()` de forma que convierta a String el próximo elemento antes de devolverlo.
+
+Output:
+
+```
+1 java.lang.String
+3 java.lang.String
+10 java.lang.String
+```
+
+Los enteros 1, 3 y 10 fueron convertidos a String.
 
 ## 4. Indicar si son verdaderas o falsas las siguientes afirmaciones sobre las clases anónimas y en cada caso justifique su respuesta:
 
 -   Se pueden instanciar más allá del punto en donde fueron declaradas.
+
+**Falso.** Las clases anónimas solo se pueden instanciar en el mismo lugar donde fueron declaradas. Fuera de ese scope no existen.
+
 -   Unos de los usos más comunes de este tipo de clases es la creación de objetos función y procesos on the fly.
+
+**Verdadero.** Un objeto-función es una instancia de una clase que exporta métodos que realizan operaciones sobre otros objetos que se pasan como parámetros. Las clases anónimas se ajustan muy bien a este propósito ya que Java no soporta la creación de funciones que estén fuera de toda clase.
+
 -   Se puede utilizar el instanceof siempre y cuando la interfaz de la que deriva la clase anónima sea de tipo marker.
+
+**Falso.** El `instanceof` **siempre** se puede usar sobre clases anónimas: 1) si la clase anónima extiende de una clase, su tipo será ese. 2) si implementa una interfaz, su tipo será ese. 3) si no hereda de ninguna clase ni implementa ninguna interfaz, su tipo será Object porque todas las clases, incluídas las anónimas, heredan de Object.
+
 -   No se puede implementar múltiples interfaces o extender clases e implementar interfaces al mismo tiempo.
+
+**Verdadero.** Una clase anónima solo puede implementar **una** única interfaz o extender de **una** única clase. Nunca ambas a la vez.
 
 ## 5. Modifique el código de la clase Stack, para que ahora la clase anidada StackIterator, se convierta en una clase anónima.
 
+??
+
 ### a) ¿En que situación es conveniente definir a una clase cómo anónima?
 
+??
+
 ### b) Si tendría que inicializar valores de la clase anónima (cuando se crea una instancia de la misma), ¿cómo lo haría?
+
+??
 
 ## 6. Defina una clase llamada Estudiante:
 
 -   Que contenga las siguientes variables de instancia:
 
-    -   apellido
     -   nombre
+    -   apellido
     -   edad
     -   legajo
     -   materiasAprobadas
@@ -130,9 +163,13 @@ Para lograr esto hacemos `import static java.lang.Math.pow;`.
 
 -   Implemente un método main() que imprima los resultado de las distintas ordenaciones utilizando clases anónimas y el método Arrays.sort().
 
+Resuelto en IntelliJ, proyecto "3".
+
 ## 7. Declaración e implementación de Tipos Enumerativos
 
 ### a) Implemente un tipo enumerativo llamado Notas que define los valores de las notas musicales y con su correspondiente cifrado americano (almacenado en un String).
+
+Resuelto en IntelliJ, proyecto "3".
 
 ### b) Implemente un tipo enumerativo llamado FrecuenciasDeLA que represente las siguientes frecuencias estándares de afinación:
 
@@ -141,8 +178,16 @@ Para lograr esto hacemos `import static java.lang.Math.pow;`.
 -   446 Hz: Renacimiento.
 -   480 Hz: Órganos alemanes que tocaba Bach.
 
+Resuelto en IntelliJ, proyecto "3".
+
 ### c) Sobrecargue los métodos hacerSonar() y afinar() de la interface InstrumentoMusical del ejercicio 1b) de la práctica 2 de manera que el nuevo hacerSonar(Notas n, int duracion) reciba como parámetro una nota musical y una duración, y el nuevo método afinar(FrecuenciaDeLA f) reciba como parámetro una frecuencia de LA.
+
+Resuelto en IntelliJ, proyecto "3".
 
 ### d) Defina una clase llamada Piano que implemente la interface InstrumentoMusical y una clase TestPiano que permita probar los métodos implementados.
 
+Resuelto en IntelliJ, proyecto "3".
+
 ### e) Implemente el patrón de diseño Singleton mediante un tipo Enumerativo el cual represente a Fito Páez. Fito cuenta con un instrumento musical (piano) y en algún momento se le puede pedir que toque una canción (especificando un arreglo de notas musicales con sus tiempos).
+
+Resuelto en IntelliJ, proyecto "3".

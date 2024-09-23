@@ -500,7 +500,7 @@ public interface A extends B, C {
 -   Los objetos-función permiten implementar el patrón Strategy. Este patrón se implementa declarando una interface que representa la estrategia y estrategias concretas (diferentes clases) que implementan dicha interface.
     -   Si la estrategia concreta se usa sólo una vez, entonces se declara e instancia como una clase anónima.
     -   Si una estrategia concreta se usa repetitivamente es conveniente definirla como una clase interna privada y exportar la estrategia mediante una constante pública de clase del tipo de la interface.
-    -   De esta manera es posible intercambiar en ejecucíón las estrategias.
+    -   De esta manera es posible intercambiar en ejecución las estrategias.
 
 ## Clases internas
 
