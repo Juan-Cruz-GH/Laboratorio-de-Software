@@ -629,9 +629,53 @@ public enum Estados { CONECTANDO, LEYENDO, LISTO, ERROR;}
 
 ## Genéricos
 
+### Introducción
+
+-   En Java se pueden definir y usar tipos y métodos genéricos (no se puede en tipos enumerativos, clases anónimas, ni subclases de excepciones).
+-   Un tipo genérico contiene uno o más tipos de datos como parámetro formal.
+-   `public class Clase<E>`
+    -   Clase es un tipo genérico.
+    -   E es un parámetro formal que denota un tipo de dato.
+    -   Los elementos que manipulará Clase serán del tipo desconocido E.
+-   Una clase genérica debe tener el mismo comportamiento para todos sus tipos posibles de parámetros.
+-   Los tipos parametrizados se forman a partir de los tipos genéricos al asignarle tipos reales a los parámetros formales:
+    -   `public class Clase<E>`
+    -   `Clase<String> clase;`
+    -   `Clase<Integer> clase;`
+
+### Motivación
+
+-   Los genéricos ofrecen una mejora para el sistema de tipos:
+    1. Permite operar sobre objetos de múltiples tipos.
+    2. Provee seguridad, permitiendo detectar errores en tiempo de compilación: la inserción errónea genera un mensaje de error que explica exactamente lo que está mal.
+    3. Los programas que usan genéricos son reusables y promueven clean code.
+-   Si no usamos genéricos es muy común tener errores en tiempo de ejecución, relacionados al casteo, que no pueden ser detectados por el compilador de antemano.
+
+### Tipos parametrizados con comodines
+
+-   El tipo genérico `<?>` se usa para denotar a la familia de todos los tipos, o un conjunto de algún tipo desconocido.
+-   Básicamente, nos permite pasar un argumento de cualquier tipo al método.
+-   No se puede usar en la definición de clases ni al hacer `new`.
+-   Permiten una mayor flexibilidad.
+-   El argumento de este tipo desconocido que se pasa por parámetro no puede ser modificado, es de solo lectura. Se trata como una instancia de Object.
+-   El tipo genérico `<? extends T>` simboliza "cualquier tipo desconocido que es una subclase o subtipo de T, incluyendo a T".
+    -   Por ejemplo: `List<? extends Number> lista` familia de todos los tipos de listas cuyos elementos son subtipos de Number.
+-   El tipo genérico `<? super T>` simboliza "cualquier tipo desconocido que es una superclase o supertipo de T, incluyendo a T".
+    -   Por ejemplo: `Comparable<? super String> s` familia de todas las instanciaciones de la interface Comparable para tipos que son supertipos de String.
+-   Estos dos se usan cuando se necesita saber parcialmente el tipo de argumentos que se pasarán al método, pero no totalmente.
+
+### Interoperabilidad con legacy code
+
+-   En Java los genéricos se implementan mediante la técnica llamada "erasure" (borrado): el compilador usa la información de los tipos genéricos y tipos parametrizados para compilar y luego elimina la información del tipo.
+-   `List<Integer>` y `List<String>` son traducidas a `List`. El bytecode es el mismo que el de `List`.
+-   Después de la traducción por borrado desaparece toda la información del tipo.
+-   Es posible invocar a un método diseñado con tipos parametrizados con tipos sin parametrizar y viceversa.
+
 ---
 
 <h1 align="center">Clase 5 - 2 de octubre, 2024</h1>
+
+## Excepciones
 
 ---
 
