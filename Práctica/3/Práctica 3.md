@@ -1,4 +1,4 @@
-<h1 align="center">Práctica 2</h1>
+<h1 align="center">Práctica 3</h1>
 
 ## Temas
 
