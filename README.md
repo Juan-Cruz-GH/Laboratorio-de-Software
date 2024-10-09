@@ -4,6 +4,8 @@
 
 -   [Material de la cátedra](https://catedras.linti.unlp.edu.ar/course/view.php?id=1247)
 -   [OpenJDK (22.0.1)](https://jdk.java.net/archive/)
+-  [Taller de Kotlin](https://sites.google.com/view/clauq/home)
+-  [IntelliJ](https://www.jetbrains.com/idea/download/other.html)
 
 ### 1° parcial
 
