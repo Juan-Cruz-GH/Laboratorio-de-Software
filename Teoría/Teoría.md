@@ -677,6 +677,139 @@ public enum Estados { CONECTANDO, LEYENDO, LISTO, ERROR;}
 
 ## Excepciones
 
+### Introducción
+
+-   Una excepción es un **evento** o **problema** que ocurre durante la ejecución de un programa e **interrumpe el flujo normal de ejecución de instrucciones** debido a que no cuenta con la información necesaria para resolver el problema en el contexto en que sucedió. Lo único que se puede hacer es abandonar dicho contexto y pasar el problema a un contexto de más alto nivel.
+-   Java usa excepciones para proveer manejo de errores a sus programas. Por ejemplo:
+    -   Acceso a posiciones inválidas de un arreglo
+    -   Falta de memoria en el sistema
+    -   Intentar abrir un archivo que no existe en el file system
+    -   Ejecutar una query sobre una tabla inexistente de una base de datos
+    -   Hacer un casting a un tipo de dato inapropiado
+-   Las excepciones solo ocurren dentro de métodos y se llevan a cabo los siguientes pasos:
+    1. Se crea un **objeto excepción** en la heap con el operador new, como cualquier otro objeto Java
+    2. Se lanza la excepción, es decir se interrumpe la ejecución del método y el objeto excepción es expulsado del contexto actual. En este punto comienza a funcionar el mecanismo de manejo de errores que consiste en buscar un lugar apropiado donde continuar la ejecución del programa. Este lugar apropiado es el manejador de excepciones, cuya función es recuperar el problema.
+
+### Tipos de excepciones en Java
+
+-   En Java las excepciones se clasifican en 3 tipos:
+
+1. **Checked Exception o Verificables en Compilación**: representan un problema que puede ser recuperado.
+    - Las aplicaciones bien escritas pueden anticipar y recuperar este tipo de errores.
+    - El compilador verifica que estos errores estén contemplados.
+    - Java obliga a los métodos que disparan este tipo de excepciones a que capturen y manejen el error o lo propaguen.
+2. **Runtime Exception o No Verificables en Compilación**: representan errores internos de la aplicación que no se pueden anticipar ni recuperar.
+    - En general son bugs del programa y son causados por errores de lógica o mal uso de la API de Java.
+    - Ejemplos:
+        - División por cero.
+        - Referencias nulas.
+        - Index out of bounds.
+        - Errores de casting.
+3. **Error**: representan errores externos a la aplicación relacionados al hardware y/o a la falta de memoria RAM. No son anticipables ni recuperables.
+
+### Manejador de excepciones
+
+-   Cuando un método dispara una excepción, crea un objeto Throwable (clase raíz de todas las excepciones) en la heap, retorna ese objeto y comienza a funcionar el mecanismo de manejo de errores. Java busca un manejador de excepciones adecuado para dicho error en la pila de ejecución de métodos.
+-   Un manejador de excepción es **adecuado si el tipo de la excepción disparada coincide con el de la manejada**.
+-   Si el sistema de ejecución no encuentra un manejador apropiado en la pila de ejecución, la excepción será atendida por un manejador default que finaliza la ejecución del programa.
+
+#### Estructura sintáctica
+
+-   Bloque `try`:
+    -   Las sentencias que pueden disparar excepciones van dentro de este bloque.
+
+```java
+try {
+
+}
+```
+
+-   Bloque `catch`:
+    -   Son los manejadores de excepciones.
+    -   Puede haber **varios** para un mismo `try`.
+    -   Se colocan inmediatamente después de que termina el bloque `try`.
+    -   Si se dispara una excepción dentro del bloque try, el mecanismo de manejo de excepciones comienza a buscar el **primer manejador de excepciones con un argumento que coincida con el tipo de excepción disparada**. La coincidencia entre el tipo de la excepción disparada y la de su manejador puede no ser exacta. **El tipo de las excepciones del manejador puede ser cualquier superclase de la excepción disparada**.
+    -   Luego se ejecuta el bloque `catch` y la excepción se considera manejada/recuperada. Solamente se ejecuta el bloque `catch` que coincide con la excepción disparada. Luego continúa la ejecución normal.
+    -   Si adentro del bloque `try` la invocación a diferentes métodos dispara el mismo tipo de excepción, solo necesitamos un único manejador de excepciones.
+
+```java
+try {
+
+}
+catch {
+
+}
+```
+
+```java
+class B extends Exception {}
+class A extends B {}
+
+try {
+    throw new A();
+}
+catch (A a) {
+    // Podríamos eliminar el primer catch y dejar solamente el segundo ya que A extiende de B.
+}
+catch (B b) {
+
+}
+```
+
+-   Bloque `finally`:
+    -   Tiene el propósito de liberar recursos antes que el control sea pasado a otra parte del programa, independientemente de si se disparó o no una excepción.
+    -   Las sentencias dentro de este bloque siempre se ejecutan independientemente de lo que sucedió en el `try`.
+    -   Debe ir luego de un `try`, pero ese `try` no necesariamente debe tener un `catch`.
+
+```java
+finally {
+
+}
+```
+
+### Jerarquía de clases de excepciones
+
+![Jerarquía de clases de excepciones](https://dotnettrickscloud.blob.core.windows.net/notes/3520240404132014.png)
+
+-   Solamente instancias de Throwable o de alguna de sus subclases pueden ser disparados por la JVM o por la sentencia `throw`. A su vez el tipo del argumento de la cláusula `catch` solamente puede ser Throwable o de alguna de sus subclases.
+-   Métodos útiles de la clase Throwable:
+    -   `String getMessage()`: devuelve un mensaje detallado de la excepción.
+    -   `String getLocalizedMessage()`: idem anterior, pero adaptado a la región.
+    -   `String toString()`: devuelve una descripción corta del Throwable incluyendo el mensaje (si existe).
+    -   `void printStackTrace()`
+    -   Imprime el error y el stack-trace del objeto. El stack-trace muestra la secuencia de métodos invocados que condujo al punto donde se disparó la excepción.
+
+### Especificación de excepciones
+
+-   La especificación de excepciones es parte de la interfaz pública del método y se ubica luego de la lista de argumentos. Se usa la palabra clave `throws` seguida por una lista de tipos de excepciones que pueden dispararse en el alcance de dicho método.
+-   Si un método no captura ni maneja las excepciones checked disparadas dentro de su alcance, el compilador JAVA **fuerza al método a especificarlas en su declaración, propagarlas**.
+-   En algunas situaciones es mejor que un método propague las excepciones, por ejemplo si se está implementando una librería, es posible que no se puedan prever las necesidades de todos los usuarios de la librería. En este caso es mejor no capturar las excepciones y permitirle a los métodos que usan las clases que manejen las excepciones que podrían dispararse.
+
+### Disparar excepciones
+
+-   Se puede disparar excepciones con la palabra clave `throw` seguido de `new` Excepcion, con Excepcion un Throwable.
+-   Se puede re-disparar excepciones:
+
+```java
+try {
+
+}
+catch (FileNotFoundException e) {
+    throw e;
+}
+catch (IOException e) {
+
+}
+```
+
+### Restricciones en excepciones
+
+-   Cuando se sobreescribe un método solamente se pueden disparar las excepciones **especificadas en la versión de la clase base del método**. La utilidad de esta restricción es que el código que funciona correctamente para un objeto de la clase base, seguirá funcionando para un objeto de la clase derivada.
+-   La interface de especificación de excepciones de un método puede **reducirse y sobreescribirse en la herencia, pero nunca ampliarse**. Es exactamente opuesto a lo que ocurre en la herencia con los especificadores de acceso de una clase.
+-   Los constructores no se sobreescriben.
+-   Los constructores de una subclase pueden disparar excepciones diferentes a las excepciones disparadas por el constructor de la superclase.
+-   Hay que ser cuidadoso de dejar el objeto que se intenta construir y no se puede, en un estado seguro.
+
 ---
 
 <h1 align="center">Clase 6 - 9 de octubre, 2024</h1>
