@@ -814,6 +814,202 @@ catch (IOException e) {
 
 <h1 align="center">Clase 6 - 9 de octubre, 2024</h1>
 
+## Expresiones Lambda
+
+### Introducción
+
+-   La idea de las expresiones lambda en Java se origina gracias al concepto de interfaces funcionales, que fue agregado en Java 8.
+-   Las interfaces funcionales son interfaces que poseen un único método.
+-   Se pueden crear instancias de interfaces funcionales usando lambdas.
+-   Una expresión lambda es una **función que puede o no tomar parámetros de entrada y devuelve un valor**. Posee las siguientes características principales:
+    -   No tiene nombre.
+    -   No pertenece a ninguna clase
+    -   Se puede pasar como parámetro.
+    -   Se puede ejecutar on-demand.
+    -   Deberían ser cortas, 3 líneas como máximo.
+    -   Son similares a las clases anónimas pero mucho más concisas.
+    -   Se pueden escribir de muchas formas.
+
+### Inferencia de tipos
+
+-   Si usamos tipos genéricos, en los lambdas no se escriben los tipos de datos, ya que el compilador los infiere del contexto.
+
+```java
+List<String> palabras = new ArrayList<>();
+palabras.add("hola");
+palabras.add("chau");
+Collections.sort(palabras, (p1, p2) -> Integer.compare(p1.length(), p2.length()));
+
+// Si no usamos tipos genéricos se vuelve mucho más verboso e inseguro:
+List palabras = new ArrayList<>();
+palabras.add("hola");
+palabras.add("chau");
+Collections.sort(palabras, (String p1, String p2) -> Integer.compare(((String)p1).length(), ((String)p2.length())));
+```
+
+### Formas de escribir lambdas
+
+-   Si el lambda es de una línea, se puede omitir la palabra clave `return`.
+
+1. Parámetros sin usar paréntesis ni especificando tipos
+
+```java
+parámetro -> System.out.println("Hola " + parámetro)
+```
+
+2. Parámetros usando paréntesis pero no especificando tipos
+
+```java
+(parámetro) -> System.out.println("Hola " + parámetro)
+```
+
+3. Parámetros usando paréntesis especificando tipos
+
+```java
+(String parámetro) -> System.out.println("Hola " + parámetro)
+```
+
+4. Bloque de código entre llaves y con sentencia `return`
+
+```java
+(String parámetro) -> {
+    return "Hola " + parámetro
+}
+```
+
+### Referencias a métodos (operador ::\)
+
+-   Cuando lo único que hace la expresión lambda es invocar a un método con los parámetros que recibió, se pueden usar **referencias a métodos** para obtener un código más conciso.
+
+```java
+list.forEach(item -> System.out.println(item));
+
+// Se puede simplificar a (son equivalentes):
+
+list.forEach(System.out::println);
+```
+
+## Colecciones
+
+### Introducción
+
+-   Una **colección** es un objeto que agrupa múltiples elementos y que se usa para almacenar, recuperar, manipular y comunicar datos agregados. Representan elementos que naturalmente/intuitivamente se agrupan, como podría ser una carpeta de emails.
+-   Un **framework de colecciones** es una arquitectura que permite representar y manipular colecciones de datos de manera estándar. Se compone de:
+    -   Interfaces: tipos de datos abstractos que representan colecciones. Permiten que las colecciones sean manipuladas **independientemente de los detalles de implementación**. Forman una jerarquía.
+    -   Implementaciones: son las implementaciones concretas de las interfaces. Son estructuras de datos reusables.
+    -   Algoritmos: son métodos que realizan operaciones útiles (búsquedas y ordenamientos) sobre objetos que implementan alguna de las interfaces de colecciones. Son métodos polimórficos: el mismo método se usa sobre diferentes implementaciones de las interfaces de colecciones. Son unidades funcionales reusables.
+-   El framework de colecciones de JAVA está formado por un conjunto de clases e interfaces ubicadas mayoritariamente en el paquete java.util.
+-   A partir de JAVA 5 soporta tipos genéricos. El compilador inserta castings automáticamente y realiza comprobación de tipos cuando se agregan elementos, evitando errores que sólo podían detectarse en ejecución. Como resultado los programas son más seguros y claros.
+
+### Ventajas
+
+-   **Reduce la programación**: provee estructuras de datos y algoritmos útiles. Facilita la interoperabilidad entre APIs no relacionadas evitando escribir adaptadores o código de conversión para conectar APIs.
+-   **Provee estructuras de datos de tamaño ilimitado**: es posible almacenar la cantidad de objetos que se desee.
+-   **Aumenta la velocidad y calidad de los programas**: provee implementaciones de estructuras de datos y algoritmos de alta performance y calidad. Las diferentes implementaciones de las interfaces son intercambiables pudiendo los programas adaptarse a diferentes implementaciones.
+-   **Permite interoperabilidad entre APIs no relacionadas**: establece un lenguaje común para pasar colecciones de elementos.
+-   **Promueve la reusabilidad de software**: las interfaces del framework de colecciones y los algoritmos que manipulan las implementaciones de las interfaces son reusables.
+
+### Motivación para la creación de tipos genéricos
+
+-   Los tipos genéricos en JAVA fueron incorporados fundamentalmente para implementar colecciones genéricas.
+-   El framework de colecciones no-genérico en JAVA no ofrecía ninguna forma de manipular colecciones **homogéneas**. Todas las colecciones contenían elementos de tipo Object y por esa razón eran de naturaleza **heterogénea**, mezcla de objetos de diferente tipo.
+    -   Esto se puede observar desde la API de colecciones (JSE 4): las colecciones no-genéricas aceptan objetos de cualquier tipo y retornan una referencia a un Object cuando un elemento es retornado.
+-   El framework de colecciones genérico de JAVA permite implementar colecciones **homogéneas**. Este framework se define a través de interfaces y clases genéricas que pueden ser instanciadas por muchos tipos.
+    -   Por ejemplo, la interface genérica `List<E>` puede ser parametrizada como una `List<String>`, `List<Integer>`, cada una de ellas es una lista homogénea de valores strings, enteros, etc. A partir de la clase genérica `ArrayList<E>` puede obtenerse la clase parametrizada `ArrayList<String>`, `ArrayList<Double>`, etc.
+
+### Estructura de la jerarquía de colecciones de Java
+
+![Estructura de la jerarquía de colecciones de Java](https://i.imgur.com/QKCARY1.png)
+
+-   Las interfaces **centrales** especifican los múltiples contenedores de elementos.
+    -   Permiten a las colecciones ser manipuladas independientemente de los detalles de implementación.
+-   Las interfaces **secundarias** especifican las formas de recorrer las colecciones.
+-   Todas las interfaces de colecciones son genéricas, encapsulan distintos tipos de colecciones de objetos y son el fundamento del framework de colecciones de Java; pertenecen al paquete java.util.
+
+### Interface Collection
+
+-   Es la raíz de la jerarquía de colecciones.
+-   Es genérica: cuando se declara un objeto Collection es posible establecer el tipo de dato que se almacenará en la colección y de esta manera se evita la necesidad de castear cuando se leen los elementos. Se evitan errores de casting en ejecución y se le da al compilador información sobre el tipo usado para poder hacer un chequeo fuerte de tipos.
+-   Generaliza el concepto de grupos de objetos llamados elementos.
+-   No posee una implementación directa.
+
+#### Interface List
+
+-   Secuencia de elementos, cada uno con su posición.
+-   Almacena los elementos en el mismo orden en que fueron insertados.
+-   Permite elementos duplicados.
+-   Provee acceso indexado.
+-   Define métodos para recuperar y agregar elementos en una posición determinada o índice.
+-   Es una implementación de List basada en arreglos de longitud variable, es similar a Vector. Las operaciones `size()`, `isEmpty()`, `get()`, `set()`, `iterator()`, y `listIterator()` tienen tiempo de ejecución constante O(1). La operación `add()` tiene tiempo de ejecución lineal O(n).
+
+#### Interface Set
+
+-   Colección de objetos sin duplicados y sin orden (a priori).
+-   Modela el concepto de conjunto matemático (teoría de conjuntos).
+-   Es usado para representar conjuntos de cosas que no se repiten, por ej. las materias que cursa un estudiante, o los procesos en una computadora.
+-   Es una implementación de Set basada en una tabla de hashing. No hay garantías acerca del orden de ejecución en las distintas iteraciones sobre el conjunto. Las operaciones básicas `(add()`, `remove()`, `size()`, `contains()`) tienen tiempo de ejecución constante O(1).
+
+##### Interface SortedSet
+
+-   Es un Set que mantiene todos los elementos ordenados en orden ascendente.
+-   Se agregan métodos adicionales para sacar ventaja del orden.
+-   Se usan para conjuntos ordenados naturalmente.
+
+##### Interface NavigableSet
+
+#### Interface Queue
+
+-   Es una colección diseñada para mantener elementos que esperan por procesamiento.
+-   Mantiene los elementos previamente a ser procesados.
+-   Además de las operaciones de Collection, agrega operaciones adicionales para inserción, extracción e inspección de elementos.
+-   No permite elementos nulos.
+-   Típicamente los elementos de una Queue están ordenados mediante una estrategia **FIFO**.
+-   Existen implementaciones de colas de prioridades.
+-   Hay dos implementaciones de Queue: PriorityQueue y LinkedList (también implementa List)
+
+##### Interface Dequeue
+
+-   Puede ser usada con estrategia **FIFO** y como una **LIFO**.
+-   Todos los elementos pueden ser insertados, recuperados y removidos de ambos extremos.
+
+#### Interface Map
+
+-   Representa asociaciones entre objetos de la forma **clave-valor**.
+-   No hereda de Collection.
+-   No permite claves duplicadas.
+-   Cada clave está asociada a lo sumo con un valor.
+-   Tanto la clave como el valor son tipos genéricos.
+-   También llamada diccionario.
+-   Tiene similitudes con HashTable.
+-
+-   **HashMap**: es una implementación de un Map basada en una tabla de hashing. Las operaciones básicas (get() y put()) tienen tiempo de ejecución constante O(1).
+
+##### Interface SortedMap
+
+-   Es un Map que mantiene sus asociaciones ordenadas **ascendentemente por clave**.
+-   Son usados para colecciones de pares clave-valor **naturalmente ordenados** (diccionarios, directorios telefónicos).
+
+##### Interface NavigableMap
+
+### Recorrer una colección
+
+1. **Usando el for-each**:
+
+    - Forma concisa de recorrer colecciones y arreglos.
+    - Se incorporó en JSE 5.
+    - Es la manera más legible y preferida.
+    - Funciona con cualquier cosa que produzca un iterador. La interface Collection extiende de Iterable, entonces cualquier implementación de Set, List y Queue pueden usar el for-each.
+
+2. **Usando la interface Iterator**:
+    - Un objeto Iterator permite recorrer una colección de forma secuencial, y remover elementos selectivamente si se desea. Se obtiene el iterador de una colección invocando al método `iterator()`. Una colección es un objeto Iterable.
+    - No se recomienda usar por ser menos legible y más engorroso.
+
+### ¿Cómo las interfaces Sorted mantienen el orden de sus elementos?
+
+-   De acuerdo al ordenamiento natural de sus elementos (en el caso de SortedMap, de sus claves) o a un comparador de ordenación provisto en el momento de la creación (**Comparator**).
+-   Las interfaces Comparable y Comparator permiten comparar objetos y de esta manera es posible ordenarlos.
+-   Múltiples clases de la plataforma Java implementan la interface Comparable, entre ellas: String, Integer, Double, Float, Boolean, Long, Byte, Character, Short, Date, etc.
+
 ---
 
 <h1 align="center">Clase 7 - 16 de octubre, 2024</h1>
@@ -827,3 +1023,7 @@ catch (IOException e) {
 <h1 align="center">Clase 9 - 6 de noviembre, 2024</h1>
 
 ---
+
+```
+
+```
