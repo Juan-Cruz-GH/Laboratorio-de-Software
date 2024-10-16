@@ -5,17 +5,10 @@
 -   [Material de la cátedra](https://catedras.linti.unlp.edu.ar/course/view.php?id=1247)
 -   [OpenJDK (22.0.1)](https://jdk.java.net/archive/)
 -   [Taller de Kotlin](https://sites.google.com/view/clauq/home)
--   [Entrega Taller de Robots en Kotlin](https://catedras.linti.unlp.edu.ar/mod/assign/view.php?id=41398)
-    -   Consiste en rehacer el taller de robots (parte 1) pero en Kotlin.
 
-### 1° parcial
+### 2° parcial
 
--   Nos dan un código java "feo" y tenemos que mejorarlo usando interfaces, clases abstractas, enums, herencia, composición, etc.
--   Se hace en máquina, podes llevar la tuya si querés.
--   No se permite usar internet, ni ChatGPT, etc.
--   Se permite leer tu código de prácticas anteriores y también PDFs de teoría, etc.
--   Es en el horario de práctica y **no hay teoría ese día**.
--   **No entra genéricos**.
+-   ?
 
 ## Cómo se aprueba la cursada?
 
