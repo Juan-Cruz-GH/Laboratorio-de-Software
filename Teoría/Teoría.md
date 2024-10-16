@@ -1014,6 +1014,28 @@ list.forEach(System.out::println);
 
 <h1 align="center">Clase 7 - 16 de octubre, 2024</h1>
 
+## Anotaciones
+
+### Introducción
+
+-   Metadatos del código fuente.
+
+### @Override
+
+### @Deprecated
+
+### @SuppressWarnings
+
+### @FunctionalInterface
+
+### Anotaciones personalizadas
+
+### Anotaciones Marker
+
+## Reflexión
+
+### Introducción
+
 ---
 
 <h1 align="center">Clase 8 - 23 de octubre, 2024</h1>
