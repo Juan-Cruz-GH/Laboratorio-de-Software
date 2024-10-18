@@ -1018,27 +1018,98 @@ list.forEach(System.out::println);
 
 ### Introducción
 
--   Metadatos del código fuente.
+-   Son un tipo de dato, un tipo especial de interface que se usa para anotar declaraciones.
+-   Una anotación es una instancia de un tipo anotación.
+-   Se expresa con el prefijo "@".
+-   Son metadatos del código fuente que proveen información extra que es testeada y verificada en compilación.
+-   Se pueden aplicar a paquetes, clases, interfaces, enums, variables, parámetros, métodos, constructores, etc.
+-   Se pueden leer desde el código fuente, desde archivos .class, y usando **reflection**.
+-   El código anotado no es afectado. Las anotaciones solo proveen info para otros sistemas.
+-   El desarrollo basado en anotaciones alienta al estilo de programación declarativa, donde el programador dice qué debe hacerse y las herramientas lo hacen automáticamente.
 
 ### @Override
 
+-   Declaramos que se **sobreescribe** el método definido en la superclase.
+-   El compilador examina la superclase y garantiza que el método que posee la anotación @Override en la subclase esté definido en la superclase.
+-   Nos ayuda a evitar errores.
+-   Los IDEs pueden generar alertas si un método sobreescribe un método de la superclase y no posee la anotación @Override.
+
 ### @Deprecated
+
+-   Se usa para declarar que el elemento marcado está desaprobado y se dejará de usar/será reemplazado por otro en futuras versiones.
+-   El compilador alerta o emite un error cuando un elemento anotado como @Deprecated es accedido por código que está en uso.
+-   Puede aplicarse a métodos, clases, propiedades.
+-   El objetivo es desalentar el uso del elemento marcado como @Deprecated.
 
 ### @SuppressWarnings
 
+-   Es útil para eliminar advertencias del compilador a ciertas partes del programa.
+-   Las alertas que pueden suprimirse varían, pero las más comunes son "deprecation", "unchecked", "unused".
+
 ### @FunctionalInterface
+
+-   Asegura que la interface funcional define un único método.
+-   Si posee más de un método, el compilador emite un mensaje de error: **Invalid @FunctionalInterface annotation"**.
+-   Es una indicación explícita para los programadores y herramientas de desarrollo que la interface está diseñada para ser usada como funcional.
 
 ### Anotaciones personalizadas
 
+-   Es similar a declarar una interface: el símbolo "@" precede a la palabra clave interface.
+-   El cuerpo de las anotaciones contiene declaraciones de elementos o parámetros que permiten especificar valores para las anotaciones.
+-   Si una anotación posee un solo elemento se puede usar el nombre **value** y de esta manera, cuando anotamos un elemento, omitimos el nombre del elemento seguido del signo "=".
+
 ### Anotaciones Marker
+
+-   Son anotaciones sin elementos.
+-   Son útiles para marcar elementos de una aplicación con un determinado propósito.
+
+### ¿Para qué usar anotaciones?
+
+-   Las anotaciones no poseen lógica ni afectan el código que anotan.
+-   Son usadas por **procesadores o consumidores o parsers de anotaciones**, que son aplicaciones o sistemas que hacen uso del código anotado y ejecutan diferentes acciones dependiendo de la información suministrada.
+    -   Por ejemplo: JUnit lee y analiza las clases de testeo anotadas y decide por ejemplo en qué orden serán ejecutadas las unidades de testeo. Hibernate usa anotaciones para mapear objetos a tablas de la BD.
+-   Las anotaciones pueden ser procesadas en compilación o en ejecución usando **reflection**.
+-   Las anotaciones son compiladas a .class y recuperadas en ejecución.
+-   Los procesadores mencionados usan **reflection** para leer y analizar el código anotado en ejecución.
+
+### Elementos de las anotaciones
+
+-   Los tipos permitidos para los elementos de una anotación son:
+    -   Primitivos.
+    -   String
+    -   Class
+    -   Enums
+    -   Anotaciones
+    -   Arreglos de cualquiera de los tipos mencionados
+-   Ningún elemento puede no especificar valores, los elementos tienen valores default o provistos.
+-   Ninguno de los elementos puede tomar valor null.
+
+### Generación de archivos externos
+
+-   Las anotaciones son especialmente útiles cuando trabajamos con frameworks Java que requieren de cierta información adicional que acompaña al código.
+-   Tecnologías como web services, librerías de custom tags y herramientas ORM como Hibernate requieren de archivos descriptores XML que son externos al código. Trabajar con un archivo descriptor separado requiere mantener 2 fuentes de información separadas sobre una clase y es frecuente que aparezcan problemas de sincronización entre ambas. El programador, además de saber Java, debe saber cómo manipular el archivo descriptor.
+-   Por ejemplo: proveer un soporte básico de mapeo objeto-relacional para automatizar la creación de una tabla de la BD y guardarla en una clase Java. Usando anotaciones podemos mantener toda la info en el .java → necesitamos anotaciones para definir el nombre de la tabla asociada con la clase, las columnas y los tipos SQL que mapean con las propiedades de la clase.
 
 ## Reflexión
 
 ### Introducción
 
+-   Es la capacidad de inspeccionar, analizar y modificar código en ejecución.
+-   El paquete java.lang.reflect ofrece acceso programático a información de las clases **cargadas en ejecución**.
+-   El punto entrada de reflection es el objeto Class: contiene métodos para recuperar información de constructores, métodos, variables, etc. Es posible crear instancias, invocar métodos, acceder a variables de instancia.
+
+### Meta-anotaciones
+
+-   La declaración de anotaciones requiere de meta-anotaciones que indican **cómo será usada la anotación**.
+-   Java provee 4 meta-anotaciones: @Target, @Retention, @Documented, @Inherited.
+
 ---
 
 <h1 align="center">Clase 8 - 23 de octubre, 2024</h1>
+
+## ?
+
+## ?
 
 ---
 
