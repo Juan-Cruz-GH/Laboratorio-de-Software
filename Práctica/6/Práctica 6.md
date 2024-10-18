@@ -16,11 +16,28 @@ public class TestSobreescritura {
 }
 ```
 
+Lo que ocurre es que se sobreescribe el `toString()` en esta clase de la siguiente forma: se retorna el valor del ``toString()```original concatenado con Testeando: 'Override'.
+
+Es válido y además no produciría ninguna alerta ya que se usa correctamente la anotación @Override.
+
 ### a) ¿Qué ocurre cuando se ejecuta TestAnotaciones?
+
+Cuando se ejecuta TestAnotaciones, ocurre lo siguiente:
+
+1. Se crea una instancia de la clase y se invoca al método `testearYa()`
+2. El método `testearYa()` crea una instancia de la clase TestDeprecated exitosamente.
+3. Luego invoca al método `hacer()` sobre esa instancia, el cual tiene la anotación @Deprecated, lo cual simboliza que es un método que no debería usarse.
+4. Sin embargo, como `testearYa()` posee la anotación SupressWarnings con argumento deprecation, la alerta de la anotación @Deprecated que se genera al invocar a `hacer()` es ignorada completamente.
 
 ### b) ¿Qué ocurre si se elimina @SuppressWarnings({"deprecation"})? ¿el resultado de la ejecución es el mismo?
 
+Si se elimina @SuppressWarnings({"deprecation"}), podremos ver efectivamente la alerta de el compilador diciendonos que estamos invocando a un método deprecated.
+
 ### c) ¿Cuál es la diferencia entre anotar el método testearYa() y anotar la clase TestAnotaciones?
+
+Al anotar el método `testearYa()` con @SuppressWarnings({"deprecation"}), las únicas alertas de deprecation que se ignorarán serán las que ocurran **dentro de ese método** pero no sobre otros métodos de la misma clase.
+
+Si anotaramos con @SuppressWarnings({"deprecation"}) a la clase TestAnotaciones en su totalidad, las alertas de deprecation serían ignoradas para todos los métodos dentro de la clase y no solo `testearYa()`.
 
 ```java
 public class TestDeprecated {
