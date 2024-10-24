@@ -5,7 +5,7 @@
 -   [Material de la cátedra](https://catedras.linti.unlp.edu.ar/course/view.php?id=1247)
 -   [OpenJDK (22.0.1)](https://jdk.java.net/archive/)
 -   [Taller de Kotlin 1](https://sites.google.com/view/clauq/home)
--   [Taller de Kotlin 2](<[placeholder.com](https://sites.google.com/view/kotlin-taller2/inicio)>)
+-   [Taller de Kotlin 2](https://sites.google.com/view/kotlin-taller2/inicio)
 
 ### 2° parcial
 
