@@ -67,21 +67,26 @@ public class TestAnotaciones {
 
 Las anotaciones que entiende son las siguientes:
 
--   @Archivo(name="nombre.extension"): Indica que la información se almacenará en el archivo nombre.extension. Si no se explicita un nombre se utiliza el nombre de la clase.
--   @AlmacenarAtributo: Denota que el nombre del atributo que está a continuación de la anotación se debe almacenar en el archivo.
+-   @Ejercicio2.Archivo(name="nombre.extension"): Indica que la información se almacenará en el archivo nombre.extension. Si no se explicita un nombre se utiliza el nombre de la clase.
+-   @Ejercicio2.AlmacenarAtributo: Denota que el nombre del atributo que está a continuación de la anotación se debe almacenar en el archivo.
 
 Por ejemplo, dada la siguiente clase:
 
 ```java
-@Archivo(nombre="AchivoMapeado.txt")
-public class Mapeado {
-@AlmacenarAtributo
-private String valor = "Default1";
-@AlmacenarAtributo
-private Integer valor2=20;
-@AlmacenarAtributo
-private Float valor3=30.20f;
-private Float valor4=30.20f;
+import Ejercicio2.AlmacenarAtributo;
+import Ejercicio2.Archivo;
+
+@Archivo(nombre = "AchivoMapeado.txt")
+public class Ejercicio3.
+
+Mapeado {
+    @AlmacenarAtributo
+    private String valor = "Default1";
+    @AlmacenarAtributo
+    private Integer valor2 = 20;
+    @AlmacenarAtributo
+    private Float valor3 = 30.20f;
+    private Float valor4 = 30.20f;
 //Metodos getters y setters
 }
 ```
@@ -89,7 +94,7 @@ private Float valor4=30.20f;
 La salida en el archivo AchivoMapeado.txt sería:
 
 ```
-<nombreClase>Mapeado</nombreClase>
+<nombreClase>Ejercicio2.Mapeado</nombreClase>
 <nombreAtributo>valor</nombreAtributo>
 <nombreValor>Default1</nombrenombreValor>
 <nombreAtributo>valor2</nombreAtributo>
@@ -97,6 +102,8 @@ La salida en el archivo AchivoMapeado.txt sería:
 <nombreAtributo>valor3</nombreAtributo>
 <nombreValor>30.2</nombrenombreValor>
 ```
+
+Resuelto en IntelliJ, proyecto "6".
 
 ## 3. Implementar el siguiente ejercicio:
 
@@ -116,3 +123,5 @@ La salida en el archivo AchivoMapeado.txt sería:
 -   Invocar a todos los métodos que fueron anotados con la anotación @Invocar
 
 ### e. Pruebe el servidor HTTP creado en los incisos anteriores con un navegador de Internet.
+
+Resuelto en IntelliJ, proyecto "6".
