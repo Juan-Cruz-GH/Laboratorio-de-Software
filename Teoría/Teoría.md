@@ -1107,9 +1107,210 @@ list.forEach(System.out::println);
 
 <h1 align="center">Clase 8 - 23 de octubre, 2024</h1>
 
-## ?
+## Threads en Kotlin
 
-## ?
+### Introducción
+
+-   Un thread o hilo es un flujo de control secuencial dentro de un proceso. Se los conoce como "procesos livianos" o "contextos de ejecución".
+-   Un thread es similar a un programa secuencial: tiene un comienzo, una secuencia de ejecución, un final y en un instante de tiempo dado hay un único punto de ejecución. Sin embargo, un thread no es un programa. Un thread se **ejecuta adentro de un programa**.
+-   Se pueden usar múltiples threads en un mismo programa, ejecutándose simultáneamente.
+-   En el modelo de multithreading la CPU asigna a cada thread un tiempo para que se ejecute; cada thread “tiene la percepción” que dispone de la CPU constantemente, sin embargo el tiempo de CPU está dividido entre todos los threads.
+-   Un thread se ejecuta dentro del contexto de un programa o proceso y comparte los recursos asignados al programa. A pesar de esto, los threads toman algunos recursos del ambiente de ejecución del programa como propios: tienen su propia pila de ejecución, contador de programa, código y datos.
+
+### Threading en Kotlin
+
+-   Kotlin y Java soportan programas multithreading a través del lenguaje, de librerías y del sistema de ejecución.
+-   Hay dos estrategias para usar Threads:
+    -   Directamente controlar la creación y el gerenciamiento **instanciando un Thread cada vez que la aplicación requiere iniciar una tarea concurrente**.
+    -   Abstraer el gerenciamiento de threads **pasando la tarea concurrente a un ejecutor** para que la administre y ejecute.
+-   Tanto Kotlin como Java son multithread: siempre hay un thread ejecutándose junto con las aplicaciones de los usuarios, por ejemplo el garbage collector es un thread que se ejecuta en background; las GUIs dibujan las componentes en la pantalla, etc.
+
+### Función thread()
+
+-   La función `thread()` proporcionada por el paquete `kotlin.concurrent` facilita la creación y ejecución de hilos en un programa: provee el comportamiento genérico de los threads Kotlin: arranque, ejecución, interrupción, asignación de prioridades, etc.
+-   Posee la firma:
+
+```kt
+fun thread(start: Boolean = true, isDaemon: Boolean = false, contextClassLoader: ClassLoader? = null, block: () -> Unit): Thread
+```
+
+-   **start**: Indica si el hilo debe comenzar a ejecutarse inmediatamente después de ser creado o no. Por defecto, es true.
+-   **isDaemon**: Indica si el hilo debe ser un hilo daemon. Estos no impiden que la JVM se cierre. Por defecto, es false.
+-   **contextClassLoader**: Un ClassLoader que se establece como el cargador de clases del nuevo hilo. Puede ser null si se quiere utilizar el cargador de clases actual.
+-   **block**: Es un bloque lambda que contiene el código que se ejecutará en el nuevo hilo.
+-   La función devuelve una instancia de Thread que referencia al nuevo hilo creado.
+
+### Métodos de la clase Thread
+
+-   **sleep**: Suspende temporalmente la ejecución del thread que se está ejecutando. Afecta solamente al thread que ejecuta el `sleep()`, no es posible decirle a otro thread que se duerma.
+-   **join**: Permite que un thread espere a que otro termine de ejecutarse. El objetivo es esperar por un evento específico: la terminación de un thread. El thread que invoca al `join()` sobre otro thread se bloquea hasta que dicho thread termine. Una vez que el thread se completa, el método `join()` retorna inmediatamente.
+-   **yield**: Permite indicar al mecanismo de scheduling que el thread ya hizo suficiente trabajo y que podría cederle tiempo de CPU a otro thread. Su efecto es dependiente del SO sobre el que se ejecuta la JVM.
+-   **interrupt**: Es un pedido de interrupción. El thread que lo recibe se interrumpe a sí mismo de una manera conveniente. El pedido causa que los métodos de bloqueo (`sleep()`, `join()`, `wait()`) disparen la excepción InterruptedException y además setea un flag en el thread que indica que al thread se le ha pedido que se interrumpa. Se usa el método `isInterrupted()` para preguntar por este flag.
+
+### Ciclo de vida de un Thread
+
+1. **Estado New Thread**: Inmediatamente después que un thread es creado pasa a estado New Thread, pero aún no ha sido **iniciado**, por lo tanto no puede ejecutarse. Para esto se debe invocar al método start().
+2. **Estado Running (Ejecutándose) o Runnable (Ejecutable)**: Después de ejecutarse el método start() el thread pasa al estado Runnable o Ejecutable. Un thread arrancado con start() podría o no comenzar a ejecutarse. No hay nada que evite que el thread se ejecute. La JVM implementa una estrategia (scheduling) que permite compartir la CPU entre todos los threads en estado Runnable.
+3. **Estado Not Runnable o Blocked (Bloqueado)**: Un thread pasa a estado Not Runnable o Bloqueado cuando ocurre alguno de estos eventos: se invoca al método `sleep()`, al `wait()`, `join()` ó el thread está bloqueado en espera de una operación de I/O, el thread invoca a un método synchronized sobre un objeto y el lock del objeto no está disponible. Cada entrada al estado Not Runnable tiene una forma de salida correspondiente. Cuando un thread está en estado bloqueado, el scheduler lo saltea y no le da ningún slice de CPU para ejecutarse.
+4. **Estado Dead**: Los threads definen su finalización implementando un `run()` que termine naturalmente.
+
+### Prioridades en Threads
+
+-   Cuando se tiene una única CPU, los threads se ejecutarán de a uno a la vez simulando concurrencia. Uno de los gran beneficios de threading es que permite abstraernos de la cantidad física de procesadores que se tiene.
+-   Cuando múltiples threads quieren ejecutarse, es el SO el que determina a cuál de ellos le asignará CPU. Los programas Kotlin pueden influir, pero la decisión final es del SO.
+-   Se llama scheduling a la estrategia que determina el **orden de ejecución de múltiples threads sobre una única CPU**.
+-   La JVM soporta un algoritmo de scheduling simple llamado scheduling de prioridad fija, que consiste en determinar el orden en que se ejecutarán los threads de acuerdo a la prioridad que ellos tienen.
+-   Cuando se crea un thread, éste hereda la prioridad del thread que lo creó (NORM_PRIORITY ). Es posible modificar la prioridad de un thread después de su creación usando el método `setPriority(int)`. Las prioridades de los threads son números enteros que varían entre las constantes MIN_PRIORITY y MAX_PRIORITY.
+-   El sistema de ejecución elige para ejecutar, entre los threads que están en estado Runnable, **aquel que tiene prioridad más alta**. Cuando éste thread finaliza, cede el procesador, o pasa a estado Bloqueado, comienza a ejecutarse un thread de más baja prioridad.
+-   El scheduler usa una **estrategia round-robin** para elegir entre dos threads de igual prioridad que están esperando por la CPU. El thread elegido se ejecuta hasta que un thread de más alta prioridad pase a estado Runnable, ceda la CPU a otro thread, finalice su ejecución ó, expire el tiempo de CPU asignado (time-slicing). Luego, el segundo thread tiene la posibilidad de ejecutarse.
+-   El algoritmo de scheduling también es **preemptive**: cada vez que un thread con mayor prioridad que todos los threads que están en estado Runnable pasa a estado Runnable, el sistema de ejecución elige a este nuevo thread de mayor prioridad para ejecutarse.
+
+### Ejecutores
+
+-   Son objetos que encapsulan la creación y administración de threads, permitiendo desacoplar la tarea concurrente del mecanismo de ejecución. Se encargan de crear, usar y schedulear threads.
+-   Son una capa intermedia entre el cliente y un thread.
+-   Permiten modelar programas como una serie de tareas concurrentes asincrónicas, evitando los detalles asociados con threads: simplemente se crea una tarea que se pasa al ejecutor apropiado para que la ejecute.
+-   Es un objeto que implementa la interface Executor.
+-   Ejemplo:
+
+```kt
+val t = thread() { ... } // Threads creados por el programador
+
+val e = unEjecutor
+e.execute { ... }
+```
+
+-   El método `execute()` crea y lanza los threads inmediatamente.
+
+### Pool de threads
+
+-   Las implementaciones de ejecutores suelen usar pool de threads, el cual minimiza la sobrecarga causada por la creación de nuevos threads → reuso de threads.
+-   Aumenta la performance de aplicaciones que ejecutan muchos threads simultáneamente. El pool adquiere un rol crucial en configuraciones donde se tienen **más threads que CPUs** → programas más rápidos y eficientes.
+
+### Exclusión mutua
+
+-   Con multithreading hay situaciones en que dos o más threads intentan acceder a los mismos recursos al mismo tiempo. Se debe evitar este tipo de colisión sobre los recursos compartidos (durante períodos críticos): acceder a la misma cuenta bancaria en el mismo momento, imprimir en la misma impresora, etc.
+-   Para resolver el problema de colisiones, todos los esquemas de multithreading establecen un orden para acceder al recurso compartido. En general se lleva a cabo usando una cláusula que bloquea (lock) el código que accede al recurso compartido y así solamente de a un thread a la vez se accede al recurso. Esta cláusula **implementa exclusión mutua**.
+-   Java provee soporte para **exclusión mutua mediante la palabra clave synchronized**.
+-   Cada objeto contiene un lock único llamado monitor. Cuando invocamos a un método synchronized, el objeto es “bloqueado” (locked) y ningún otro método synchronized sobre el mismo objeto puede ejecutarse hasta que el primer método termine y libere el lock del objeto.
+-   El lock del objeto es único y compartido por todos los métodos y bloques synchronized del mismo objeto. Este lock evita que el recurso común sea modificado por más de un thread a la vez.
+-   Es posible definir un **bloque** synchronized:
+
+```java
+synchronized (unObjeto) {}
+```
+
+-   Un thread puede adquirir el lock de un objeto múltiples veces. Esto ocurre si un método invoca a un segundo método synchronized sobre el mismo objeto, quién a su vez invoca a otro método synchronized sobre el mismo objeto, etc. La JVM mantiene un contador con el número de veces que el objeto fue bloqueado (lock).
+    -   Cuando el objeto es desbloqueado, el contador toma el valor cero.
+    -   Cada vez que un thread adquiere el lock sobre el mismo objeto, el contador se incrementa en uno.
+    -   Cada vez que abandona un método synchronized el contador se decrementa en uno, hasta que el contador llegue a cero, liberando el lock para que lo usen otros threads.
+    -   La adquisición del lock múltiples veces sólo es permitida para el thread que lo adquirió en el primer método synchronized que invocó.
+
+### Sincronización
+
+-   `wait()`: Suspende la ejecución del thread y libera el lock del objeto, y así permite que otros métodos synchronized sobre el mismo objeto puedan ejecutarse.
+-   `notify()`: Despierta a un thread.
+-   `notifyAll()`: Despierta a **todos** los threads esperando por el `wait()`. Cuando eso ocurre, compiten por el lock y que lo obtiene (de forma no determinística) retoma la ejecución.
+
+## Concurrencia en Kotlin
+
+### Corrutinas
+
+-   Un thread es un flujo de control secuencial dentro de un proceso.
+-   Una corrutina es un flujo de control secuencial no bloqueante asincrónico dentro de un thread, siendo el cómputo más lightweight dentro de la programación concurrente.
+-   Las corrutinas proveen concurrencia pero no paralelismo y pueden suspenderse sin bloquear el thread.
+-   Las corrutinas son similares a los threads en la programación concurrente tradicional, pero están basadas en multitareas cooperativas.
+-   Los threads son siempre **globales**, mientras que las corrutinas tienen **alcance**.
+-   El Scheduling de las corrutinas es **non-preemptive** y es realizado por el lenguaje o el programador. Los cambios entre diferentes contextos de ejecución lo hacen las propias corrutinas en lugar del sistema operativo o la máquina virtual.
+-   Las corrutinas se caracterizan por:
+    -   Son muy eficientes.
+    -   No utilizan context switching.
+    -   No reservan espacio extra en la pila de ejecución.
+    -   No requieren sincronización.
+
+### Cómo usar corrutinas
+
+-   Las corrutinas forman parte del paquete **kotlinx.coroutines**, por lo que se necesita en el proyecto especificar la siguiente dependencia:
+
+`implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")`
+
+-   Para iniciar una corrutina se debe usar un constructor (principalmente: launch, runBlocking, async) y pasar las sentencias a ejecutar como un bloque de código:
+
+```kt
+import kotlinx.coroutines.*
+
+fun main() = runBlocking { //inicia una nueva corrutina y bloquea su hilo contenedor
+    launch { // dispara una nueva corrutina y continua.
+        delay(1000L) // non-blocking delay de 1 segundo (unidad default ms)
+        println("World!") // imprime luego del delay
+    }
+    println("Hello") // la corrutina principal continúa mientras que la anterior se suspende
+}
+```
+
+-   El constructor de corrutina launch devuelve un job que es el handle de la corrutina lanzada.
+-   El handle de una corrutina puede ser usado para esperar explícitamente la finalización o la cancelación de la misma.
+-   El constructor launch puede tomar un parámetro opcional, **CoroutineContext**, que especifica un conjunto de elementos como el dispatcher, el CoroutineName, etc. que determinan el contexto de la corrutina.
+-   Otro parámetro opcional del launch es el **CoroutineStart** que define las opciones de arranque:
+    -   **DEFAULT**: inicia inmediatamente.
+    -   **LAZY**: sólo inicia invocando al `start()`.
+    -   **ATOMIC**: ejecuta atómicamente.
+    -   **UNDISPATCHED**: ejecuta inmediatamente hasta el primer punto de suspensión en el thread actual.
+
+### Dispatchers y threads
+
+-   El dispatcher de la corrutina que determina qué thread o threads se utilizaran para la ejecución, pudiendo confinar la ejecución a un thread específico, despacharla a un pool de threads o dejar que se ejecute sin confinar.
+-   Alternativas para el uso de dispatchers:
+
+    1.  Usar uno de un grupo de varias implementaciones de CoroutineDispatcher:
+
+        -   **Dispatchers.Default**: Usa un pool threads compartidos en background.
+        -   **Dispatchers.Main**: Se limita al Main thread y por lo general es single-threaded.
+        -   **Dispatchers.IO**: Está diseñado para transferir tareas IO bloqueantes a un grupo compartido de threads.
+        -   **Dispatchers.Unconfined**: No se limita a ningún thread específico,permite que la corrutina se reanude en cualquier subproceso utilizado por la función de suspensión correspondiente, sin imponer ninguna política de subprocesos específica.
+
+    2.  Crear un único thread dedicado para ejecutar la corrutina con newSingleThreadContext, pero resultando muy caro desde el punto de vista del uso de recursos.
+    3.  Usar java.util.concurrent.Executor arbitrario que pueda convertirse en un dispatcher con la función de extensión asCoroutineDispatcher.
+
+### Modificador suspend
+
+-   Las corrutinas se usan para implementar funciones de suspensión y pueden cambiar contextos solamente en los puntos de suspensión.
+-   El modificador **suspend** permite lanzar un método en una corrutina.
+-   Los métodos marcados con **suspend sólo pueden ser invocados desde una corrutina o desde otro método suspend**.
+
+### Alcance de corrutinas
+
+-   Utilizando el constructor **coroutineScope** se crea un ámbito de corrutina que no finaliza hasta que todos los hijos lanzados hayan terminado.
+-   Para crear corrutinas de nivel superior, alcance de aplicación, se utiliza el constructor **GlobalScope.launch**.
+-   Los constructores **runBlocking** y **coroutineScope** difieren principalmente en que el primero bloquea el thread actual, mientras que el segundo sólo suspende; liberando el cómputo para otros usos.
+
+### Constructor async
+
+-   El constructor de corrutina async devuelve un objeto **Deferred<T>**.
+-   Es necesario invocar a `await()` para obtener el objeto resultado de tipo T del **Deferred<T>**.
+-   Una función común no puede llamar al await, se debe usar launch para lanzar una corrutina nueva desde una función.
+-   Se debe usar el async solo cuando se esté dentro de una corrutina o de una función suspend.
+
+### Flujo asincrónico
+
+-   **Flow<T>** representa un flujo de datos asíncrono que emite valores secuencialmente.
+-   Usualmente representan cold streams, no se produce ningún valor si no hay nadie que lo colecte.
+-   Las principales maneras de construir un flujo son:
+    -   `flowOf()` crea un flujo a partir de un conjunto fijo de valores.
+    -   `asFlow()` construye un flujo sobre distintos conjuntos de elementos.
+    -   `flow {}` fabrica un flujo a partir de llamadas secuenciales a la función emit.
+
+### Canales channel y channelFlow
+
+-   Un canal es conceptualmente muy similar a cola bloqueante con dos operaciones en suspensión **send** y **receive**.
+-   channelFlow es utilizado para crear flujos destinados a trabajar de forma concurrente y en lugar de utilizar la función emit utiliza send.
+
+### Canales vs flujos
+
+-   Los canales empiezan a **emitir datos inmediatamente** sin importar si algún consumidor recibe los datos.
+-   Los canales se deben **cerrar explícitamente una vez finalizado su objetivo** para evitar pérdidas.
+-   Los flujos son una buena opción para el **procesamiento secuencial de datos**.
+-   Para delimitar las emisiones al ciclo de vida de un determinado componente se recomienda el uso de los flujos. Si por el contrario la generación de datos no debe estar sujeta a un ciclo de vida específico, se debe usar canales.
 
 ---
 
