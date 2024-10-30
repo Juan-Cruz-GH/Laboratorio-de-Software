@@ -6,6 +6,8 @@
 -   [OpenJDK (22.0.1)](https://jdk.java.net/archive/)
 -   [Taller de Kotlin 1](https://sites.google.com/view/clauq/home)
 -   [Taller de Kotlin 2](https://sites.google.com/view/kotlin-taller2/inicio)
+-   [Foro de consultas del Trabajo Final](https://catedras.linti.unlp.edu.ar/mod/forum/view.php?id=41535)
+-   [Explicación del Trabajo Final](https://catedras.linti.unlp.edu.ar/mod/bigbluebuttonbn/bbb_view.php?action=play&bn=2278&rid=2762&rtype=presentation)
 
 ### 2° parcial
 
