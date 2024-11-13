@@ -1314,10 +1314,16 @@ fun main() = runBlocking { //inicia una nueva corrutina y bloquea su hilo conten
 
 ---
 
-<h1 align="center">Clase 9 - 6 de noviembre, 2024</h1>
+<h1 align="center">Clase 9 - 13 de noviembre, 2024</h1>
 
 ---
 
-```
+## Android
 
-```
+---
+
+<h1 align="center">Clase 10 - 20 de noviembre, 2024</h1>
+
+## ?
+
+---
