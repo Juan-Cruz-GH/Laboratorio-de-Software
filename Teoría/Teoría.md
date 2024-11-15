@@ -1320,6 +1320,206 @@ fun main() = runBlocking { //inicia una nueva corrutina y bloquea su hilo conten
 
 ## Android
 
+### Introducción
+
+-   Android es un **sistema operativo** de código abierto para celulares basado en el Linux Kernel versión 2.6.
+-   Las aplicaciones para Android son desarrolladas en Java y Kotlin usando el Android Software Development Kit, que incluye herramientas y APIs.
+-   El IDE oficial para desarrollar en Android es Android Studio.
+-   Java solía ser el lenguaje oficial para desarrollar en Android pero a partir de 2017 el oficial es Kotlin.
+-   Las aplicaciones Android pueden ser ofrecidas a los usuarios vía Google Play.
+
+### Versiones de Android
+
+-   A partir de 2009 y hasta el 2018, las versiones de Android eran nombradas con nombres de golosinas de EEUU y de forma alfabética.
+-   Después de 2018 se cambió a una nomenclatura numérica.
+-   La versión más nueva es Android 14.
+
+### Arquitectura de Android
+
+![Arquitectura de Android](https://i.imgur.com/I1UufbI.png)
+
+#### Application Framework
+
+-   Esta capa provee un conjunto de clases e interfaces usadas para crear apps. Viene preinstalado con Android.
+-   Ofrece los siguientes servicios y sistemas:
+    -   **Activity Manager**: Maneja el ciclo de vida de los **activities** y mantiene un **backstack** de navegación del usuario.
+    -   **Content Provider**: Permite a las apps acceder a datos de otras apps, y compartir sus propios datos.
+    -   **Resource Manager**: Provee acceso a recursos que no son código.
+    -   **Notification Manager**: Permite a las aplicaciones mostrar notificaciones de alerta en la barra de estado. Por ejemplo: llegó un mensaje, citas, alertas de proximidad, etc. Pueden presentarse de forma no intrusiva.
+    -   **Location Manager**: Además del GPS, Android calcula la información de posición usando la proximidad con las torres de telefonía celular.
+    -   **View System**: Es un conjunto rico y extensible de vistas que pueden usarse para construir aplicaciones, incluyendo listas, grillas, cuadros de texto, botones, etc.
+
+#### Librerías
+
+-   Android incluye librerías escritas en C o C++, compiladas para el hardware particular que usa el celular y preinstaladas por el fabricante del dispositivo. Estas librerías son invocadas por programas de alto nivel.
+    -   **Browse Engine**: es el motor de navegación en Internet de código fuente abierto basado en la librería WebKit. Es el mismo motor que usa Chrome, Safari.
+    -   **SQL database**: Android incluye un motor de BD liviano, SQLite (usado por firefox y iphone).
+    -   **Soporte avanzado de gráficos 2D y 3D**: es posible combinar elementos 2D y 3D en una interfaz gráfica. Las librerías usan hardware 3D si el dispositivo dispone del mismo o un software de rendering si no lo dispone; animaciones mediante SGL (Scalable Games Languages) y OpenGL.
+    -   **Media Framework**: con Android es posible reproducir videos y música de una amplia variedad de formatos (mp3, mpeg-4, etc).
+    -   **Surface Manager**: es el administrador de ventanas de Android. Los comandos de dibujo van a parar a un bitmap offscreen que luego se combina con otros bitmaps para formar la presentación que ve el usuario.
+
+#### Runtime
+
+-   Las apps Android se ejecutan en el Android Runtime.
+-   El Android Runtime usa una compilación Ahead Of Time, junto con recolección optimizada de elementos no utilizados (garbage collection) y ejecutan código .dex (Dalvik Executable).
+-   Los archivos .class y .jar son convertidos a .dex en tiempo de compilación vía el compilador dx.
+-   Los archivos .dex y los recursos de un proyecto Android se empaquetan todos en un archivo .apk (Android Package). La herramienta aapt se encarga de esto.
+-   Las aplicaciones Android se ejecutan en su propio proceso Linux.
+
+#### Kernel Linux
+
+-   Android está basado en el Kernel de Linux.
+-   Este Kernel ofrece un capa de abstracción entre el hardware y el resto del stack de software. Provee servicios esenciales como manejo de procesos, memoria, filesystem, etc.
+-   El Android Runtime usa funcionalidades de este Kernel.
+-   Este subsistema Linux es completamente transparente para los usuarios de Android. Nunca lo ven.
+
+#### Aplicaciones y Widgets
+
+-   Es la capa de más alto nivel, es la única que ven los usuarios finales.
+-   Las apps son programas que ocupan toda la ventana e interactúan con el usuario.
+-   Los widgets son programas que se muestran en una porción de la ventana del Home Application.
+-   Todas las apps que vienen preinstaladas se desarrollan usando la misma API que las de terceros e incluso pueden reemplazarlas.
+-   Las apps Android son gerenciadas por un contenedor con ciclos de vida completos que facilitan el uso eficiente de la memoria.
+-   Cada app Android se ejecuta en un proceso Linux distinto y es independiente de las demás aplicaciones.
+-   Cada app Android es un archivo .apk.
+-   Cada app Android debe firmarse digitalmente antes de ser instalada. A partir de 2021, las apps se publican usando Android App Bundle en Google Play. Es un formato que incluye todos los recursos y el código compilado, delegando la generación del .apk y la firma a la tienda, lo que nos ahorra espacio.
+
+### Cómo se desarrollan las apps Android?
+
+-   Se crean archivos de configuración específicos de Android y se escribe la lógica de la app en Kotlin o Java.
+-   Las herramientas del Android SDK convierten estos archivos en una app Android de forma transparente. Cuando se deploya en el IDE, la app completa es compilada, empaquetada, desplegada y arrancada.
+-   Se utiliza el IDE Android Studio, el cual está basado en el IDE IntelliJ y tiene incorporado por defecto el SDK de Android.
+
+### Ciclo de vida de una aplicación Android
+
+-   Todas las aplicaciones Android se ejecutan en memoria continuamente hasta que el sistema necesite recursos para otras aplicaciones.
+-   Android maneja los recursos de las apps.
+-   Android usa una jerarquía de prioridades para determinar el orden en que las apps terminan.
+-   Los procesos que hostean las apps podrían ser dados de baja para liberar recursos que se asignan a apps de mayor prioridad.
+-   Existen 3 prioridades: crítica, alta, baja.
+
+### Componentes de una aplicación Android
+
+-   Las componentes o unidades de código independientes constituyen los “building blocks” de las aplicaciones Android. Cada componente es una entidad individual, juega un rol específico y tiene su propio ciclo de vida.
+
+![Componentes de una aplicación Android](https://i.imgur.com/t826Th3.png)
+
+### Activities
+
+-   Es la interfaz visual.
+-   Una app Android suele estar formada por múltiples Activities.
+-   Son pantallas con las que el usuario interactúa.
+-   Se desarrollan extendiendo la clase Activity.
+-   Cada Activity tiene una vista o conjunto de vistas agrupadas bajo un contenedor (Layout).
+-   Usan Views (Widgets), Layout Managers y Fragments para crear la interfaz de usuario e interactuar.
+
+#### Pila de Activities
+
+-   Una app suele contener múltiples Activities y a partir de cada una de ellas se pueden iniciar otras Activities de la misma app o de otras app.
+-   Las Activities se organizan en una pila de Activities.
+-   Cuando el usuario presiona el botón Atrás ó se cierra una app, se destruye la actividad y se reanuda la actividad anterior (se restaura el estado anterior de su interfaz de usuario).
+
+#### Ciclo de vida
+
+-   El ciclo de vida de un Activity es manejado por un Activity Manager. Éste es responsable de crear, destruir y gerenciar los activities.
+-   Un Activity puede estar en varios estados:
+    -   **Arrancando**: el Activity no está en memoria. Mientras está arrancando ejecutará varios métodos que lo pasará al estado Activa.
+    -   **Activa**: el Activity es el que está actualmente en la pantalla y con el que está interactuando el usuario.
+        -   Pasar de Arrancando a Activa es **costoso** en memoria, CPU y batería.
+    -   **Visible**: el Activity está visible pero desenfocado (pausado).
+    -   **Parada**: el Activity no está visible, está en segundo plano y sigue en memoria.
+    -   **Destruida**: el Activity no está más en memoria.
+-   **NOTA**: Los Activities que no están ejecutándose pueden estar en estado Detenido y el sistema podría “matar” en cualquier momento los procesos que los alojan, por ejemplo si la AA que se está ejecutando necesita memoria. Es importante tener esto en cuenta en el momento del diseño del Activity.
+
+#### Métodos del ciclo de vida de un Activity
+
+-   `onCreate(Bundle)`: se invoca cuando el Activity es creado por primera vez, por ende solo se invoca una vez. Suele usarse para settear el layout del Activity y es el único método que se debe sobreescribir.
+-   `onStart()`: indica que la Activity será mostrada al usuario.
+-   `onResume()`: se invoca cuando la Activity comienza a interactuar con el usuario.
+-   `onPause()`: se invoca cuando la Activity pasa a segundo plano ya que otra toma foco. Se usa para guardar el estado del programa, liberar recursos o parar threads que están en background.
+-   `onStop()`: se invoca cuando la Activity ya no está visible al usuario. Se puede usar para guardar el estado de la app e interrumpir operaciones CPU intensive.
+-   `onDestroy()`: se invoca justo antes que la Activity sea quitado de memoria. Es la última acción que realizará el Activity hasta que sea creado de nuevo y no hay garantías de que sea invocado.
+
+### AndroidManifest.xml
+
+-   Todos los componentes de una app Android se deben unir para que la aplicación pueda ejecutarse. Esto se logra mediante el archivo AndroidManifest.xml, el cual se usa para definir las relaciones entre estos componentes.
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package=“labo.holamundo">
+    <application android:icon="@drawable/icon">
+    <activity android:name=".HolaMundo" android:label="@string/app_name">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
+    </application>
+</manifest>
+```
+
+-   La acción **android.intent.action.MAIN** indica que es un punto de entrada a la aplicación.
+-   La categoría **android.intent.category.LAUNCHER** ubica a este activity en la ventana principal.
+-   El tag **intent-filter** define los intents que pueden ser usados para arrancar el Activity.
+-   Esta aplicación de ejemplo contiene un solo Activity, cuya clase se llama .HolaMundo.
+-   @string hace referencia a info guardada en uno de los archivos de recursos.
+-   El atributo label es obtenido del archivo de recursos string como app_name.
+
+### Recursos: la carpeta res
+
+-   En un proyecto de Android Studio, la carpeta **res** contiene los recursos usados por la aplicación, que no son código.
+-   Se dividen en varias subcarpetas:
+    -   **drawable**: archivos .jpg, .png, y .xlm descriptores de imágenes.
+    -   **layout**: archivos .xml con las vistas de la aplicación.
+    -   **menu**: archivos .xml con los menús de cada Activity.
+    -   **value**: archivos .xml que representan valores de tipo string, colores, o estilo.
+    -   etc.
+
+### La clase R
+
+-   Es una clase auto-generada por Android para cada proyecto.
+-   Su función se proveer acceso a los **recursos** de la aplicación desde código Java.
+-   Sus atributos representan elementos de UI.
+-   Los Recursos son tratados de forma especial en Android ya que se compilan a código binario.
+-   Las animaciones, vistas, layouts, string, colores, arreglos se definen en XML y luego éstos son procesados por la herramienta aapt (Android Resource Compiler) y compiladas en la clase R. Luego los recursos son accesibles a través de la clase R.
+-   Esta clase no debe ser modificada y es recreada automáticamente cada vez que se hacen cambios en la carpeta de recursos.
+
+### Intents
+
+-   Son mensajes asincrónicos que permiten a las componentes solicitar la funcionalidad de otras componentes.
+-   Pueden arrancar un Activity, solicitar que un servicio arranque/se detenga, o simplemente hacer difusiones.
+-   Permiten navegar de un Activity a otro y comunicarse/transferir datos entre Activities.
+-   Existen 2 tipos: **explícitos e implícitos**.
+
+#### Explícitos
+
+-   Definen exactamente la componente que se quiere invocar usando su clase Java.
+-   Se usan cuando se abre un Activity desde otro.
+
+#### Implícitos
+
+-   Describen la acción que se desea realizar y proporcionan datos para la realización de dicha acción.
+-   El SO decide cuál es el componente que se ajusta mejor al pedido.
+-   Se usan, por ejemplo, para delegar responsabilidad en una app distinta a la nuestra.
+-   Hacen uso de los IntentFilters para describir la acción que se quiere realizar:
+
+| Constante     | Acción                                                    |
+| ------------- | --------------------------------------------------------- |
+| ACTION_MAIN   | Arrancar el Activity cuando arranca la aplicación.        |
+| ACTION_EDIT   | Mostrar datos al usuario para editar.                     |
+| ACTION_CALL   | Hacer una llamada.                                        |
+| ACTION_SYNC   | Sincronizar datos de un servidor con los del dispositivo. |
+| ACTION_PICK   | Tomar y retornar datos.                                   |
+| ACTION_DIAL   | Marcar un número de teléfono.                             |
+| ACTION_SENDTO | Enviar un mensaje de texto.                               |
+
+-   Se pueden definir nuevas acciones personalizadas
+-   Cada IntentFilter puede definir cero o más acciones y cero o más categorías.
+-   Si no se especifican acciones, coincidirá con cualquier Intent, en otro caso coincidirá con el Intent que tenga la misma acción. Un IntentFilter sin categorías coincidirá solamente con Intents sin categorías, en otro caso deberá tener al menos las que tiene el intent.
+
+###
+
 ---
 
 <h1 align="center">Clase 10 - 20 de noviembre, 2024</h1>
