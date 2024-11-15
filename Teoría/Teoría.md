@@ -1518,8 +1518,6 @@ fun main() = runBlocking { //inicia una nueva corrutina y bloquea su hilo conten
 -   Cada IntentFilter puede definir cero o más acciones y cero o más categorías.
 -   Si no se especifican acciones, coincidirá con cualquier Intent, en otro caso coincidirá con el Intent que tenga la misma acción. Un IntentFilter sin categorías coincidirá solamente con Intents sin categorías, en otro caso deberá tener al menos las que tiene el intent.
 
-###
-
 ---
 
 <h1 align="center">Clase 10 - 20 de noviembre, 2024</h1>
