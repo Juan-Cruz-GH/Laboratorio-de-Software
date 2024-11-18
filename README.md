@@ -7,7 +7,6 @@
 -   [Taller de Kotlin 1](https://sites.google.com/view/clauq/home)
 -   [Taller de Kotlin 2](https://sites.google.com/view/kotlin-taller2/inicio)
 -   [Foro de consultas del Trabajo Final](https://catedras.linti.unlp.edu.ar/mod/forum/view.php?id=41535)
--   [Explicación del Trabajo Final](https://catedras.linti.unlp.edu.ar/mod/bigbluebuttonbn/bbb_view.php?action=play&bn=2278&rid=2762&rtype=presentation)
 -   [Guía de Android Studio](https://developer.android.com/studio/intro/user-interface)
 -   [Documento de la primer entrega del Trabajo Final (se entrega el 20/11)](https://docs.google.com/document/d/1uVHsTiH5lBUAUU04WKiBFcSvmoaquO5ohfS7ePV_-58/edit?tab=t.0#heading=h.r3hcyqbgnzdb)
 
