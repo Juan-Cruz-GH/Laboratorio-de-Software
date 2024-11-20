@@ -1522,6 +1522,34 @@ fun main() = runBlocking { //inicia una nueva corrutina y bloquea su hilo conten
 
 <h1 align="center">Clase 10 - 20 de noviembre, 2024</h1>
 
+## Diseño de Interfaces Gráficas en Android
+
+### Introducción
+
+### Vistas vs Layouts
+
+### Layouts XML
+
+#### LinearLayout
+
+#### RelativeLayout
+
+#### GridLayout
+
+### Identificación de vistas/widgets
+
+### Fragmentos
+
+### ActionBar
+
+### Botones de navegación
+
+### Jetpack Compose
+
+---
+
+<h1 align="center">Clase 11 - 27 de noviembre, 2024</h1>
+
 ## ?
 
 ---
