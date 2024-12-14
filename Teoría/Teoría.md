@@ -1526,30 +1526,204 @@ fun main() = runBlocking { //inicia una nueva corrutina y bloquea su hilo conten
 
 ### Introducción
 
+Existen 2 métodos de construir interfaces gráficas en Android:
+
+-   **Declarativo**:
+
+    -   Se usa XML para declarar qué se mostrará en la UI.
+    -   Es similar al frontend web con HTML.
+    -   Android Studio posee herramientas que ayudan a desarrollar usando este método.
+    -   XML es un lenguaje universal y legible que puede ser entendido por fuera de Android.
+    -   Desventaja: no provee manejo de eventos producidos por la interacción con los usuarios.
+
+-   **Programático**:
+    -   Se usa código Java o Kotlin para desarrollar la UI.
+    -   Es similar a AWT o Swing en una aplicación JSE.
+    -   Provee manejo de eventos cuando el usuario interactúa con una componente.
+
+Lo ideal es usar ambos métodos: el método declarativo para lo estático de la UI como el **layout** y las componentes o widgets; y el método programático para declarar qué ocurre cuando el usuario interactúa con los widgets.
+
+**XML → cómo se ve el widget.**
+**Java/Kotlin → cómo reacciona el widget.**
+
 ### Vistas vs Layouts
+
+Android organiza la UI en **vistas** y **layouts**.
+
+Las **vistas** son todo lo que se ve, como botones, etiquetas, cajas de diálogo, etc. Son los widgets.
+
+Los **layouts** organizan y agrupan vistas. También se los denomina ViewGroup. Se guardan en archivos XML ubicados en res/layout.
+
+Las vistas son componentes de UI que están contenidas dentro de los layouts que son contenedores.
+
+Los activities usan a los layouts para mostrar las pantallas de la aplicación.
 
 ### Layouts XML
 
+Un layout, además de contener vistas, puede contener otros layouts también, creando así una jerarquía.
+
+Los layouts más representativos en Android son el Linear, el Relative, y el Grid.
+
+![setContentView()](https://i.imgur.com/UTtSc41.png)
+
 #### LinearLayout
+
+Alinea a todos sus hijos en una dirección única, horizontal o vertical.
+
+-   **wrap_content**: el ancho o la altura de la vista se establece como el tamaño mínimo necesario para adaptar el contenido a esta vista.
+-   **match_parent**: el ancho o la altura de la vista se amplía hasta coincidir con el tamaño de la vista principal.
 
 #### RelativeLayout
 
+Ubica a sus vistas hijas en relación a sus hermanas y al padre.
+
+Usando este layout es posible posicionar una vista a la izquierda, derecha, arriba o abajo de sus vistas hermanas.
+
+También se puede posicionar una vista en relación a su padre alineado horizontalmente, verticalmente o según alguno de los bordes.
+
 #### GridLayout
+
+Ubica a sus hijos en una grilla rectangular.
+
+-   Divide al área en filas, columnas y celdas.
+-   Soporta espaciado entre las filas y columnas.
+-   Un widget puede ocupar un área rectangular de varias celdas contiguas.
 
 ### Identificación de vistas/widgets
 
+-   Los widgets pueden tener un ID, el cual es único.
+-   Los IDs se usan para manipular widgets desde Java o Kotlin.
+-   El ID se define en XML, en el archivo de layout, atributo id.
+-   Cuando la app se compila, el ID es referenciado como un número entero y agregado a la clase R.
+-   Formato: **@+id/unNombre**
+
+    -   Por ejemplo: **@+id/botonActualizar**
+
+-   La vinculación de vista genera una clase de vinculación para cada layout presente que contiene referencias directas a todas las views que tienen un ID en el archivo de layout correspondiente.
+    -   En la mayoría de los casos, la vinculación de vistas reemplaza a findViewById.
+    -   Para habilitar la vinculación de vista en un módulo, se agrega el elemento viewBinding a su archivo build.gradle:
+
+```
+android {
+    ...
+    viewBinding {
+        enabled = true
+    }
+}
+```
+
 ### Fragmentos
+
+-   Un fragmento es una parte de la GUI que puede agregarse o eliminarse de la misma de forma independiente al resto de elementos del Activity y puede reutilizarse en otros Activities.
+-   Un fragmento se ejecuta dentro del contexto de un Activity, pero posee su propio ciclo de vida.
+-   Permiten dividir a la interfaz en varias porciones de forma que podamos diseñar diversas configuraciones de pantalla, dependiendo de su tamaño y orientación, **sin tener que duplicar código**.
+
+#### Ciclo de vida
+
+-   Su ciclo de vida está conectado al del Activity.
+-   Si el Activity se detiene, sus fragmentos también.
+-   Si el Activity se destruye, sus fragmentos también.
+-   Se implementan los siguientes métodos:
+    -   `onCreate()`: Se llama a la hora de crear el fragmento. Se usa para iniciar los componentes esenciales del mismo.
+    -   `onCreateView()`: Se llama cuando se crea la interface de usuario o vista. Normalmente se devuelve la view del fragmento.
+    -   `onPause()`: Se llama cuando el usuario abandona el fragmento. Se usa para guardar información.
+
+#### Agregar un fragmento a un Activity
+
+Se puede hacer de dos formas:
+
+1. Declarar el fragmento en el layout del Activity
+2. Agregar directamente el fragmento mediante programación Android.
+
+Para agregar o eliminar un fragmento, se debe usar un FragmentManager con el cual es posible crear una FragmentTransaction.
+
+FragmentTransaction tiene la API para agregar, eliminar, reemplazar y llevar a cabo otras transacciones con fragmentos.
 
 ### ActionBar
 
+-   Situada en la parte superior de la pantalla, este elemento de la interfaz fue creado para que el usuario tuviera una experiencia unificada a través de las distintas aplicaciones.
+-   Reune varios elementos:
+    -   El icono de la aplicación con su nombre.
+    -   Los botones de acciones frecuentes.
+    -   Las acciones menos utilizadas (se sitúan en un menú desplegable, que se abrirá desde el botón Overflow).
+-   Si la aplicación dispone de pestañas (tabs), estas podrán situarse en la barra de acciones.
+-   También pueden añadirse otros elementos, como listas desplegables y otros tipos de widgets incrustados.
+-   En caso de disponer de menos tamaño de pantalla el sistema puede redistribuir los elementos y pasar alguna acción al menú de «Overflow».
+-   Hay que agregar la última versión de la librería de compatibilidad: Android Support Library en el bloque dependencies del archivo build.gradle del módulo:
+
+```
+dependencies {
+    ...
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+}
+```
+
 ### Botones de navegación
 
+-   En Android 3.0, se introdujeron cambios significativos en el comportamiento global de la navegación.
+-   Utilizando las pautas de navegación con los botones Back y Up, la navegación en su aplicación será predecible y confiable para los usuarios.
+-   En Android 2.3 y versiones anteriores, se confió en el botón Back del sistema para respaldar la navegación dentro de una aplicación. Con la introducción de las barras de acciones en Android 3.0, apareció un segundo mecanismo de navegación: el botón Up, que consiste en el icono de la aplicación y una pequeña flecha a la izquierda.
+-   El botón Up se utiliza para navegar dentro de una aplicación sobre la base de las relaciones jerárquicas entre pantallas.
+    -   Si una pantalla aparece en la parte superior de una aplicación (es decir, en el inicio de la aplicación), no debe incluir el botón Up.
+-   El botón Back del sistema se utiliza para navegar, en orden cronológico inverso, por el historial de pantallas en las que recientemente trabajó el usuario.
+-   Cuando la pantalla que se visitó anteriormente es también el componente jerárquico primario de la pantalla actual, si se presiona el botón Back, se obtendrá el mismo resultado que si se presiona el botón Up.
+-   Se puede hacer que el botón Up sea más inteligente.
+-   Por ejemplo en ese caso, mediante el botón Up podrá regresar a un contenedor (Películas) por el que el usuario no navegó anteriormente.
+
 ### Jetpack Compose
+
+-   Jetpack Compose es un framework para crear IU nativas de Android, simplificando el desarrollo utilizando con menos código Kotlin.
+-   Se basa en definir la IU de manera programática via funciones que admiten **composición** en lugar de enfocarse en el proceso de construcción de la IU.
+-   Ofrece una implementación de Material Design 3 con elementos de la IU listos para usar.
+    -   Material Design se basa en tres pilares: Color, Typography y Shape.
+-   Para crear una función que admita composición, se agrega la anotación @Composable al nombre de la función.
+-   La anotación @Preview permite obtener una vista previa sin tener que utilizar un emulador o dispositivo Android. Se debe usar en una función sin parámetros.
+-
+
+```kt
+import androidx.compose.runtime.Composable
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            Saludo("Mundo")
+        }
+    }
+}
+
+@Composable
+fun Saludo(name: String) {
+    Text(text = "Hola $name!")
+}
+
+@Preview
+@Composable
+fun SaludoPreview() {
+    Saludo("Mundo")
+}
+```
 
 ---
 
 <h1 align="center">Clase 11 - 27 de noviembre, 2024</h1>
 
-## ?
+## OpenStreetMap
 
----
+###
+
+###
+
+###
+
+###
+
+## Arquitectura de una aplicación Android
+
+###
+
+###
+
+###
+
+###
