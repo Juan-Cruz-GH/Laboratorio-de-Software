@@ -1919,10 +1919,82 @@ Las rutas se construyen a partir de objetos Road, RoadNode y RoadLeg, los cuales
 
 ## Arquitectura de una aplicación Android
 
-### a
+### Consideraciones
 
-### a
+Una aplicación Android consta de varios componentes: actividades, fragmentos, servicios, content providers etc.
 
-### a
+Dado que los dispositivos móviles tienen restricciones en cuanto a memoria, capacidad de proceso, etc. el sistema operativo podría cerrar unilateralmente el proceso de la aplicación para liberar recursos.
 
-### a
+Esta contingencia está fuera de nuestro control y por ende **no debemos almacenar ni mantener en la memoria ningún estado, ni datos de la aplicación**.
+
+### Principios fundamentales
+
+1.  **Separación de problemas**: No se debería escribir el código de toda la aplicación en un activity o fragment, estos sólo deberían **contener la lógica de las interacciones con el SO y la interfaz de usuario (UI)**.
+2.  **Controlar la UI a partir de modelos de datos**: Los modelos de datos son independientes de las views y por lo tanto, no están vinculados al ciclo de vida de los activities o fragments. De este modo los usuarios no pierden los datos si el SO destruye el proceso de la aplicación para liberar recursos.
+3.  **Única fuente de información**: Para cada tipo de dato en la aplicación, se debe asignar una única fuente de información (Repositorio + Fuente de datos).
+4.  **Flujo de datos unidireccional**: El flujo del estado se dirige siempre desde el repositorio a la view, mientras que los eventos transitan en el sentido opuesto. Por ejemplo, cuando los datos de la aplicación son mostrados en un activity, los datos provienen de repositorios y al registrarse un evento (presionar un botón), la información en la pantalla es almacenada en el o los repositorios correspondientes.
+
+### Arquitectura recomendada
+
+Cada aplicación debe tener como mínimo dos capas:
+
+1. La capa de UI que muestra los datos en pantalla.
+2. La capa de datos que contiene la lógica de negocio y los datos.
+
+Se puede desagregar la lógica de negocios en una capa adicional (**capa de dominio**) a fin de potenciar la reutilización de las entidades allí definidas.
+
+### Capa de Datos
+
+Está formada por repositorios, uno por cada tipo de dato que se administre en la app. Estos, a su vez, pueden contener cero o varias fuentes de datos.
+
+Los repositorios son responsables de:
+
+-   Proveer la información a la capa de UI.
+-   Centralizar las modificaciones sobre los datos.
+-   Abstraer y resolver conflictos entre múltiples fuentes de datos.
+-   Contener a la lógica de negocio (si no se define capa de dominio).
+
+![Estructura](https://i.imgur.com/Qen0vyv.png)
+
+#### Fuente de datos
+
+-   Las fuentes de datos actúan de puente entre la aplicación y el o los sistemas que administran los datos.
+-   Las demás capas nunca deben acceder directamente a las fuentes de datos y los únicos puntos de entrada a la capa de datos son siempre los repositorios beneficiando de este modo a la escalabilidad del aplicativo.
+-   Cada clase que implementa una fuente de datos debe modelar una única fuente de datos, pudiendo ser un archivo, un servicio de red o una base de datos local. Asegurando en todo momento que contiene datos que son coherentes, correctos y actualizados.
+-   Los datos que se exponen deben ser inmutables para que otras clases no puedan manipularlos pudiendo conllevar a un estado inconsistente de los mismos.
+
+### Capa de Dominio
+
+-   Es una capa opcional que se encuentra entre la de UI y la de Datos.
+-   Es responsable de encapsular la lógica de negocio que las views utilizan.
+-   Brinda los siguientes beneficios:
+    -   Evita código duplicado.
+    -   Mejora la legibilidad y capacidad de testeo.
+    -   Evita las clases enormes, ya que permite dividir responsabilidades.
+
+### Capa de UI
+
+-   La UI son los activities o fragments que son los encargados de mostrar los datos.
+-   Tiene las siguientes responsabilidades:
+    -   Tomar información de la capa de datos, formatearla y presentársela al usuario.
+    -   Registrar los eventos de usuario y a partir de estos reflejar sus efectos en los datos según sea necesario.
+-   Si la UI es lo que ve el usuario, entonces el **estado** de la UI es lo que la app dice que debería ver.
+-   Entonces, la UI es la representación visual del estado y cualquier cambio en este último se refleja inmediatamente en el componente UI.
+-   Las clases que son responsables de la producción del estado de la UI se denominan contenedores de estado. La implementación típica es ViewModel, aunque según sean los requisitos de la aplicación una sola clase simple podría ser suficiente.
+
+### Clase ViewModel
+
+-   Esta clase permite que se conserven los datos de la vista luego de cambios de configuración, como por ejemplo las rotaciones de pantalla.
+-   Cuando una actividad es **recreada** Android reconecta automáticamente el ViewModel al activity.
+-   Provee separación de responsabilidades entre la visualización y la lógica de los activities y fragments (por ejemplo la carga de datos de alguna fuente).
+-   La clase ViewModel se utiliza para almacenar y administrar datos de la UI de manera optimizada durante el ciclo de vida de los activities.
+-   En síntesis, la componente ViewModel de Android cumple dos funciones:
+    -   Prepara y administra los datos de la vista.
+    -   Maneja la comunicación de la vista con el resto de la aplicación (datos).
+
+#### LiveData vs StateFlow
+
+-   Ambas son clases contenedoras de datos observables y siguen un patrón similar cuando se usan en la arquitectura de la aplicación.
+-   Se diferencian en:
+    -   StateFlow requiere que se pase un **estado inicial** al constructor, mientras que LiveData no.
+    -   LiveData.observe() cancela automáticamente el registro del observador cuando se pasa al estado STOPPED, mientras que StateFlow no suspende el colectado de datos. Para obtener el mismo comportamiento, se debe recolectar el flujo desde un bloque Lifecycle.repeatOnLifecycle.
