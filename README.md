@@ -15,6 +15,7 @@
 -   [Guía de Android Studio](https://developer.android.com/studio/intro/user-interface)
 -   [Documento de la primer entrega del Trabajo Final](https://docs.google.com/document/d/1uVHsTiH5lBUAUU04WKiBFcSvmoaquO5ohfS7ePV_-58/edit?tab=t.0#heading=h.r3hcyqbgnzdb)
 -   [Cómo crear listas dinámicas con RecyclerView](https://developer.android.com/develop/ui/views/layout/recyclerview?hl=es-419)
+-   [Proyecto en GitLab](https://gitlab.catedras.linti.unlp.edu.ar/laboratorio-de-software-2024/grupo_3)
 -   Nuestro ayudante asignado es "Seba V".
 
 ## Cómo se aprueba la cursada?

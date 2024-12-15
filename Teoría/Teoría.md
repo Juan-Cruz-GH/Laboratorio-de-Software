@@ -1678,7 +1678,6 @@ dependencies {
     -   Material Design se basa en tres pilares: Color, Typography y Shape.
 -   Para crear una función que admita composición, se agrega la anotación @Composable al nombre de la función.
 -   La anotación @Preview permite obtener una vista previa sin tener que utilizar un emulador o dispositivo Android. Se debe usar en una función sin parámetros.
--
 
 ```kt
 import androidx.compose.runtime.Composable
@@ -1710,20 +1709,220 @@ fun SaludoPreview() {
 
 ## OpenStreetMap
 
-###
+### Introducción
 
-###
+-   Es un proyecto que permite usar mapas y datos geográficos de forma libre, sin riesgo de infringir la ley.
+-   No solo permite dibujar mapas, también tiene funciones de trazado de rutas, geo-codificación (encontrar coordenadas de un objeto) y análisis espacial.
+-   Permite que los usuarios puedan crear sus propios mapas.
+-   Los mapas OSM contienen formas que definen las zonas urbanas (edificios, calles, plazas, etc.), señales de tráfico como semáforos,indicadores de lugares importantes (cafeterías, farmacias, iglesias, etc.), y restricciones como lo son las flechas que indican el sentido de las calles.
+-   Los mapas OSM se organizan a partir de tres componentes principales que son el núcleo del modelo de datos: los **nodos**, las **vías** y las **relaciones**.
+-   También hay etiquetas, que se usan para describir propiedades que poseen los elementos en el mapa.
+-   Las propiedades se crean a partir de nodos, vías o relaciones.
 
-###
+### Nodos
 
-###
+-   Son elementos que poseen latitud, longitud y altitud (si corresponde), un ID, y una etiqueta con sus propiedades (como por ejemplo, el número de pisos de un edificio).
+-   Se suelen usar agrupados para así definir elementos más complejos como las vías.
+-   El ID de un nodo es único. Cuando un nodo se elimina, su ID no es reutilizado.
+
+### Vías
+
+-   Son listas ordenadas de nodos (como mínimo 2 nodos y como máximo 2000) definidas por etiquetas.
+-   Sirven para determinar rutas, caminos, edificios, ríos, etc.
+-   Cada vía posee un ID único.
+-   Las vías pueden ser abiertas o cerradas. Una vía cerrada es un área que delimita una superficie, como las plazas.
+
+### Relaciones
+
+-   Son listas ordenadas de nodos, vías e incluso de otras relaciones.
+-   Definen vinculaciones físicas o lógicas entre todos los componentes de las listas.
+-   Por ejemplo, un recorrido de los autobuses, fronteras, bosques, lagos, etc.
+
+### Etiquetas
+
+-   Describen características de los elementos del mapa.
+-   Poseen la estructura clave:valor para almacenar sus datos, donde la clave es el nombre de la característica y el valor es el valor de dicha característica.
+
+#### Etiquetas comunes
+
+-   Para definir el tipo de una carretera se utiliza **highway**, **busway** o **cycleway**.
+    -   La primera es la más utilizada y sus valores pueden ser:
+        -   Primary: ruta principal.
+        -   Secondary: ruta secundaria.
+        -   Residential: para accesos a zonas residenciales o urbanizaciones.
+        -   Pedestrian: zonas peatonales.
+        -   Road: cuando no está claro su clasificación.
+        -   Construction: vías en proceso de construcción o en obras.
+        -   etc.
+-   **Route** define características tales como nombre, origen y destino o con una función determinada como por ejemplo las rutas de transporte público.
+-   **Lanes** define el número de carriles. A los carriles se les puede asignar restricciones para la conducción como por ejemplo la velocidad máxima.
+-   **Emergency** define un elemento relacionado con una situación de emergencia como una estación de policía, una estación de bomberos, etc.
+-   **Building** define edificios generales y junto a esta se usa **Addr** para definir la dirección de los mismos.
+
+### OSMDroid
+
+Es un proyecto que se desarrolló como alternativa gratuita a la clase MapView de Android. Esta clase solo usa los mapas de Google, el cual no ofrece este servicio de forma gratis ni libre.
+
+El proyecto también nos permite trabajar con mapas offline, es decir, en lugar de ir descargando los mapas **mientras** se navega, se pueden recuperar de una copia almacenada en el dispositivo.
+
+OSMBonusPack es una librería que se presenta como una extensión de OSMDroid y utiliza muchas de las clases de la librería anterior por lo que no se puede utilizar OSMBonusPack sin tener una versión instalada y actualizada de la OSMDroid.
+
+Las características más importantes de OSMBonusPack son que incorpora clases y métodos para el trazado de rutas, junto con una mejora muy importante en el sistema de marcadores.
+
+#### MapView
+
+Es la clase encargada de crear la vista del mapa y permite principalmente seleccionar el proveedor de mapas deseado, con el método `setTileSource()`, y obtener las capas u overlays del mapa (polilíneas dibujadas, marcadores, listeners de eventos, etc).
+
+También posee un controlador llamado MapController para realizar operaciones tales como: hacer zoom, centrar el mapa en una coordenada específica, desplazar el mapa hacia una posición, etc.
+
+La implementación incluida en la librería de esta clase modifica el listener de deslizamiento con el dedo sobre el mapa para reemplazarlo con uno propio que realiza la operación en la dirección opuesta. También se modifica la semántica del doble click, ahora cuando este evento es detectado se realiza una ampliación sobre el mapa.
+
+#### Marker y GeoPoint
+
+Marker es una clase que permite crear y situar marcadores en el mapa.
+
+GeoPoint es una clase que posee una latitud y una longitud. Representa coordenadas reales en el mapa, por lo que se usa cuando se quiere desplazar hacia lugares concretos, situar marcadores u otros elementos en el mapa.
+
+#### MyLocationNewOverlay
+
+Es la clase encargada de obtener la ubicación actual del usuario y su representación en el mapa.
+
+Si el dispositivo posee un mecanismo para obtener su orientación, brújula interna, aparecerá una flecha en la dirección en que se halle el dispositivo respecto del mapa. En caso contrario simplemente aparecerá el dibujo de una persona para señalizar la posición.
+
+Lleva a cabo el cambio de orientación del mapa y permite activar o desactivar el seguimiento automático de nuestra posición.
+
+Además permite informar sobre: la velocidad de desplazamiento y la precisión del método de localización.
+
+#### Instalación y permisos
+
+Al usar Gradle con OSMDroid se debe incorporar la dependencia `implementation 'org.osmdroid:osmdroid-android:6.1.0'` en el archivo build.gradle.
+
+En el AndroidManifest.xml se deben dar las siguiente autorizaciones:
+
+```xml
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+```
+
+En el Activity se deben solicitar las siguiente autorizaciones:
+
+```kt
+if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PERMISSION_GRANTED) {
+    val permiso = arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION)
+    ActivityCompat.requestPermissions(this, permiso, 1)
+}
+
+override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    super.onRequestPermissionsResult(requestCode, permissions!!, grantResults)
+    if (requestCode == 1) {
+        if (grantResults.size > 0 && grantResults[0] == PERMISSION_GRANTED)
+            Toast.makeText(this@MainActivity, "Permission Granted", Toast.LENGTH_SHORT).show()
+        else
+            Toast.makeText(this@MainActivity, "Permission Denied", Toast.LENGTH_SHORT).show()
+    }
+}
+```
+
+También se debe crear un layout como el siguiente:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <org.osmdroid.views.MapView android:id="@+id/mapview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tilesource="Mapnik"/>
+</RelativeLayout>
+```
+
+Si se utiliza Android Studio como IDE, probablemente ya haya creado un layout por defecto, el cual normalmente es llamado: "src/main/res/layouts/activity_main.xml".
+
+Crear un main activity como la siguiente:
+
+```kt
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.views.MapView
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        val mapView = findViewById(R.id.mapview) as MapView
+        mapView.setTileSource(TileSourceFactory.MAPNIK)
+        mapView.setUseDataConnection(true)
+        mapView.isClickable = true
+    }
+}
+```
+
+#### Zoom y default view point
+
+Para incorporar la función de zoom con dos dedos (multi-touch), se agrega: `map.setMultiTouchControls(true)`
+
+Si se desea mover el mapa a una posición por defecto y con un zoom determinado, se debe acceder al MapController como se muestra en siguiente segmento de código:
+
+```kt
+val mapViewController = mapView.controller
+mapViewController.setZoom(16.5)
+val Somewhere = GeoPoint(-34.9193, -57.9547)
+mapViewController.setCenter(Somewhere)
+```
+
+#### MyLocation
+
+Para marcar la posición actual del dispositivo y centrar el mapa en ella, debemos utilizar la clase MyLocationNewOverlay y mediante el método `enableMyLocation()` moveremos el mapa a nuestra posición actual.
+
+```kt
+var myLocationOverlay = MyLocationNewOverlay(mapView)
+mapView.overlays.add(myLocationOverlay)
+myLocationOverlay.enableMyLocation()
+```
+
+#### Markers
+
+Para añadir marcas en puntos específicos se debe definir una lista de puntos con una serie de atributos particulares y crear una nueva capa que contenga esta información.
+
+```kt
+val poiIcon = ResourcesCompat.getDrawable(resources, R.drawable.marker_default, null)
+val poiMarker = Marker(mapView)
+poiMarker.title = "La Plata."
+poiMarker.snippet = "Ciudad de La Plata "
+poiMarker.position = Somewhere
+poiMarker.icon = poiIcon
+poiMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+mapView.overlays.add(poiMarker)
+```
+
+#### GeocoderNominatim y Marker Clustering
+
+GeocoderNominatim es una clase que es equivalente al Geocoder de Android. En lugar de utilizar el servidor de Google, utiliza el servidor nominatim de OpenStreetMap u otro especificado por el desarrollador.
+
+Nominatim es una herramienta que se utiliza para buscar un punto geográfico a partir de un nombre de calle, pueblo, país, lugar, etc.
+
+#### OSRMRoadManager
+
+OSRMRoadManager es la clase encargada de obtener la ruta desde un origen hacia un destino, la cual es calculada en el servidor de OSM o de otro servidor similar para el cual se está orientando la aplicación.
+
+Las rutas son devueltas en forma de indicaciones previamente definidas como "ve a la calle 'x' o gira a la derecha".
+
+Las rutas se construyen a partir de objetos Road, RoadNode y RoadLeg, los cuales todos juntos definen la ruta.
 
 ## Arquitectura de una aplicación Android
 
-###
+### a
 
-###
+### a
 
-###
+### a
 
-###
+### a
